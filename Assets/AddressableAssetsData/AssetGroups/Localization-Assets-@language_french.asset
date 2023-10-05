@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Localization-Assets-@language_french
+  m_EditorClassIdentifier: 
+  m_GroupName: Localization-Assets-@language_french
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 9c884c9f34d837b459fc4c9e6c0137f0
+  m_SerializeEntries:
+  - m_GUID: 8f586378b4e144a9851e7b34d9b748ee
+    m_Address: LiberationSans SDF
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-fr
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 17c75cc49164218458e49970be2b471d
+    m_Address: '@language_spanish'
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 26cef32dd8ec1e04aaeb1f31a0bd6350
+    m_Address: '@language_english'
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ce5a33ec9e0332d4aace63c63659f69a
+    m_Address: '@language_french'
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 1
+  m_Settings: {fileID: 11400000, guid: bfdd3c7ef01d91b438e5aba40636c449, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 2d71bcc4055e2ac4090ea5ca293375ea, type: 2}
+    - {fileID: 11400000, guid: 7208478bd7f8cc544b1da0cf0c28d19c, type: 2}
