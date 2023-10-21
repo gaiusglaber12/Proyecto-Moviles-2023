@@ -4,6 +4,7 @@ public class FileController : MonoBehaviour
 {
     #region EXPOSED_FIELDS
     [SerializeField] private TMPro.TMP_Text tmp = null;
+    [SerializeField] private PopupController popupController = null;
     #endregion
 
     #region PRIVATE_FIELDS
@@ -32,6 +33,23 @@ public class FileController : MonoBehaviour
             Init();
         }
         fileControllerInstance?.Call("WriteFile", data);
+    }
+
+    public void DeleteFile()
+    {
+        popupController.ShowAlertDialog(new string[] { "Are you sure you want to delete logs?", "deleting logs.txt", "Delete", "Cancel" },
+            (index) =>
+            {
+                Debug.Log("Index of button: "+ index);
+                if (index == -3)
+                {
+                    if (fileControllerInstance == null)
+                    {
+                        Init();
+                    }
+                    fileControllerInstance?.Call("DeleteFile");
+                }
+            });
     }
     #endregion
 

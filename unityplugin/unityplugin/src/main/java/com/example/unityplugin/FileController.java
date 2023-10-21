@@ -83,4 +83,19 @@ public class FileController {
 
         return new String(bytes);
     }
+
+    private void DeleteFile()
+    {
+        File path = mainActivity.getFilesDir();
+
+        File file = new File(path, fileName);
+        boolean deleted = file.delete();
+        if (deleted)
+        {
+            Log.i("DeleteFile", "file deleted");
+        }else
+        {
+            Log.i("DeleteFile", "cant delete file");
+        }
+    }
 }
