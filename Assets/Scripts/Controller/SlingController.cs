@@ -1,8 +1,12 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SlingController : MonoBehaviour
 {
     #region EXPOSED_FIELDS
+    [SerializeField] private List<MeshRenderer> woodRendersrs = null;
+    [SerializeField] private List<MeshRenderer> slingRenderers = null;
+
     [SerializeField] private TrayectoryHandler trayectoryHandler = null;
     [SerializeField] private Transform elasticBand = null;
     [SerializeField] private Transform center = null;
