@@ -45,13 +45,14 @@ public class CarrouselHandler : MonoBehaviour
         if (direction)
         {
             index++;
-            if (index >= virtualPurchases.Count)
+            if (index >= virtualPurchases.Count - 1)
             {
                 index = 0;
             }
         }
         else
         {
+            index--;
             if (index < 0)
             {
                 index = virtualPurchases.Count - 1;
