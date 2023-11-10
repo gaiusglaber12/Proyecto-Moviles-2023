@@ -4,9 +4,6 @@ using UnityEngine;
 public class SlingController : MonoBehaviour
 {
     #region EXPOSED_FIELDS
-    [SerializeField] private List<MeshRenderer> woodRendersrs = null;
-    [SerializeField] private List<MeshRenderer> slingRenderers = null;
-
     [SerializeField] private TrayectoryHandler trayectoryHandler = null;
     [SerializeField] private Transform elasticBand = null;
     [SerializeField] private Transform center = null;
@@ -47,7 +44,8 @@ public class SlingController : MonoBehaviour
 
         lerpToEuler = transform.eulerAngles;
         initialRotation = transform.eulerAngles;
-        trayectoryHandler.Init(null);
+        if (trayectoryHandler!=null)
+            trayectoryHandler.Init(null);
     }
     private void Update()
     {
@@ -57,12 +55,14 @@ public class SlingController : MonoBehaviour
         LerpBandEuler(lerpToEuler);
         if (elasticBand.localScale.x > minScale)
         {
-            trayectoryHandler.ToggleTrayectory(true);
+            if (trayectoryHandler != null)
+                trayectoryHandler.ToggleTrayectory(true);
             CalculateTrayectory();
         }
         else
         {
-            trayectoryHandler.ToggleTrayectory(false);
+            if (trayectoryHandler != null)
+                trayectoryHandler.ToggleTrayectory(false);
         }
     }
     #endregion
@@ -82,7 +82,8 @@ public class SlingController : MonoBehaviour
         trayectoryHeightValue += center.position;
         trayectoryHeightValue.y += 10 * elasticBand.localScale.z;
 
-        trayectoryHandler.DrawTrayectory(center.position, trayectoryHeightValue, trayectoryDepthValue);
+        if (trayectoryHandler != null)
+            trayectoryHandler.DrawTrayectory(center.position, trayectoryHeightValue, trayectoryDepthValue);
     }
 
     private void CalculateBandMovement(Vector3 tapActualPosition)

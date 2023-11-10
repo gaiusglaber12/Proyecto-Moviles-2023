@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: SlingSkinConfig 1
   m_EditorClassIdentifier: 
   remoteId: slinger_1
-  woodMaterial: {fileID: 0}
-  slingMaterial: {fileID: 0}
+  woodMaterial: {fileID: 2100000, guid: 843427db579bc624ea4ea3a0eb41a762, type: 2}
+  slingMaterial: {fileID: 2100000, guid: 843427db579bc624ea4ea3a0eb41a762, type: 2}
