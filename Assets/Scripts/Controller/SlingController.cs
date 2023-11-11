@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -34,6 +35,15 @@ public class SlingController : MonoBehaviour
 
     private Vector3 lerpToEuler = Vector3.one;
     private Vector3 initialRotation = Vector3.zero;
+
+    private bool onDespawnTransition = false;
+
+    private Action onSpawned = null;
+    #endregion
+
+    #region PROPERTIES
+    public bool OnDespawnTransition { get => onDespawnTransition; set => onDespawnTransition = value; }
+    public Action OnSpawned { get => onSpawned; set => onSpawned = value; }
     #endregion
 
     #region UNITY_CALLS
@@ -44,7 +54,7 @@ public class SlingController : MonoBehaviour
 
         lerpToEuler = transform.eulerAngles;
         initialRotation = transform.eulerAngles;
-        if (trayectoryHandler!=null)
+        if (trayectoryHandler != null)
             trayectoryHandler.Init(null);
     }
     private void Update()
@@ -133,6 +143,28 @@ public class SlingController : MonoBehaviour
     private void LerpBandEuler(Vector3 endEuler)
     {
         transform.eulerAngles = Vector3.Lerp(transform.eulerAngles, endEuler, eulerLerperSpeed);
+    }
+    #endregion
+
+    #region PUBLIC_METHODS
+    public void OnSpawn()
+    {
+        onSpawned.Invoke();
+
+        Animator animator = GetComponent<Animator>();
+        if (animator != null)
+        {
+            animator.SetBool("despawn", false);
+        }
+    }
+
+    public void SetDespawnAnim()
+    {
+        Animator animator = GetComponent<Animator>();
+        if (animator != null)
+        {
+            animator.SetBool("despawn", true);
+        }
     }
     #endregion
 }

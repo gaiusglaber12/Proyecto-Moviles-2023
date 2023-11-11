@@ -17,6 +17,7 @@ public class CurrencyView : MonoBehaviour
 
     #region PROPERTIES
     public string CurrencyId { get => currencyId; }
+    public long CantCurrency { get => lerpToCurrency; }
     #endregion
 
     #region UNITY_CALLS

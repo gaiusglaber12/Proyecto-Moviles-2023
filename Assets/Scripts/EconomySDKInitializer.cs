@@ -46,12 +46,12 @@ public class EconomySDKInitializer : MonoBehaviour
             getBalancesResult = await getBalancesResult.GetNextAsync(options.ItemsPerFetch);
             List<PlayerBalance> nextFiveBalances = getBalancesResult.Balances;
             nextFiveBalances.AddRange(firstFiveBalances);
-            persistentView.Init(nextFiveBalances);
+            persistentView.Configure(nextFiveBalances);
             // do something with your balances
         }
         else
         {
-            persistentView.Init(firstFiveBalances);
+            persistentView.Configure(firstFiveBalances);
         }
     }
     #endregion
