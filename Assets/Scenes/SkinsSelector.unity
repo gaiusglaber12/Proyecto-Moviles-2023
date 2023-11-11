@@ -772,7 +772,7 @@ GameObject:
   - component: {fileID: 761315316}
   - component: {fileID: 761315315}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: total_slingers_txt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1232,6 +1232,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: be0382a5c7e1c244691c08ac3886c800, type: 2}
   - {fileID: 11400000, guid: 4ab3ce858c5734e46a3ef819cdad3678, type: 2}
   - {fileID: 11400000, guid: e14f1fa92c063c94daf43e8b0b16ccf0, type: 2}
+  totalSlingersTxt: {fileID: 761315315}
   coinGO: {fileID: 192028155}
   gemGO: {fileID: 1418791315}
   buyButton: {fileID: 310979178}
