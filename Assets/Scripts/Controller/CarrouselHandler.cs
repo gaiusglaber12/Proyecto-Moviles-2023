@@ -20,6 +20,7 @@ public class CarrouselHandler : MonoBehaviour
 
 
     [Header("UI")]
+    [SerializeField] private TMPro.TMP_Text totalSlingersTxt = null;
     [SerializeField] private GameObject coinGO = null;
     [SerializeField] private GameObject gemGO = null;
     [SerializeField] private Button buyButton = null;
@@ -38,6 +39,7 @@ public class CarrouselHandler : MonoBehaviour
 
     #region CONSTANTS
     private const string selectedSlingerKey = "selectedSlinger";
+    private const string defaultSlinger = "SLINGER_0";
     #endregion
 
     #region UNITY_CALLS
@@ -46,8 +48,8 @@ public class CarrouselHandler : MonoBehaviour
         slingController.OnSpawned = ConfigureSlinger;
         yield return new WaitForSeconds(5); //DEBUG
         virtualPurchases = EconomyService.Instance.Configuration.GetVirtualPurchases();//DEBUG
-
         GetInventory();
+        totalSlingersTxt.text = "1/" + virtualPurchases.Count;
     }
     #endregion
 
@@ -62,16 +64,25 @@ public class CarrouselHandler : MonoBehaviour
     #region PRIVATE_METHODS
     private async Task GetInventory()
     {
-        //TO DO: select selectedItem from playerprefs
-
         await PersistentView.Instance.UpdateBalance();//TEMP
         GetInventoryOptions options = new GetInventoryOptions
         {
             ItemsPerFetch = 5
         };
-        var op = await EconomyService.Instance.PlayerInventory.GetInventoryAsync(options);
+        var op = await EconomyService.Instance.PlayerInventory.GetInventoryAsync();
 
         playerItems = op.PlayersInventoryItems;
+
+        string selectedSlingerId = PlayerPrefs.GetString(selectedSlingerKey, string.Empty);
+        string auxId = string.IsNullOrEmpty(selectedSlingerId) ? defaultSlinger : selectedSlingerId;
+
+        for (int i = 0; i < playerItems.Count; i++)
+        {
+            if (playerItems[i].InventoryItemId == auxId)
+            {
+                selectedItem = playerItems[i];
+            }
+        }
 
         buyButton.onClick.AddListener(() =>
         {
@@ -80,10 +91,19 @@ public class CarrouselHandler : MonoBehaviour
 
         selectedButton.onClick.AddListener(() =>
         {
-            selectedItem = playerItems.Find((playerItem) => playerItem.PlayersInventoryItemId == virtualPurchases[index].Rewards[0].Item.GetReferencedConfigurationItem().Id);
+            for (int i = 0; i < playerItems.Count; i++)
+            {
+                string virtualPurchaseId = virtualPurchases[index].Rewards[0].Item.GetReferencedConfigurationItem().Id;
+                if (playerItems[i].InventoryItemId == virtualPurchaseId)
+                {
+                    selectedItem = playerItems[i];
+                }
+            }
             PlayerPrefs.SetString(selectedSlingerKey, selectedItem.InventoryItemId);
+            selectedButton.interactable = false;
         });
 
+        Debug.LogWarning(" INITIALIZED ");
     }
 
     private async void AttempttoBuyItem()
@@ -97,8 +117,8 @@ public class CarrouselHandler : MonoBehaviour
         await GetInventory();
         await PersistentView.Instance.UpdateBalance();
 
-        SetSlingerPrice(virtualPurchases[index].Costs[0].Amount);
-        SetSlingerCurrencyType(virtualPurchases[index].Costs[0].Item.GetReferencedConfigurationItem().Id);
+        SetSlingerPrice(virtualPurchases[index].Costs.Count == 0 ? 0 : virtualPurchases[index].Costs[0].Amount);
+        SetSlingerCurrencyType(virtualPurchases[index].Costs.Count == 0 ? "owned" : virtualPurchases[index].Costs[0].Item.GetReferencedConfigurationItem().Id);
         loadingHolder.SetActive(false);
     }
 
@@ -124,9 +144,15 @@ public class CarrouselHandler : MonoBehaviour
         SetSlingerMaterial(skinConfigsSOs[index].SlingMaterial);
         if (virtualPurchases != null)
         {
-            SetSlingerPrice(virtualPurchases[index].Costs[0].Amount);
-            SetSlingerCurrencyType(virtualPurchases[index].Costs[0].Item.GetReferencedConfigurationItem().Id);
+            SetSlingerPrice(virtualPurchases[index].Costs.Count == 0 ? 0 : virtualPurchases[index].Costs[0].Amount);
+            SetSlingerCurrencyType(virtualPurchases[index].Costs.Count == 0 ? "owned" : virtualPurchases[index].Costs[0].Item.GetReferencedConfigurationItem().Id);
         }
+        totalSlingersTxt.text = (index+1) + "/" + virtualPurchases.Count;
+    }
+
+    private void SelectSlinger()
+    {
+
     }
 
     private void SetWoodMaterial(Material material)
@@ -147,11 +173,14 @@ public class CarrouselHandler : MonoBehaviour
 
     private void SetSlingerPrice(int price)
     {
-        if (index == 0 || HasCurrentItem())
+        if (HasCurrentItem())
         {
             priceTxt.text = "owned";
+            priceTxt.color = Color.white;
+            priceTxt.ForceMeshUpdate();
+            buyButton.interactable = true;
             buyButton.interactable = false;
-            if (playerItems.Find((playerItem) => playerItem.PlayersInventoryItemId == selectedItem.InventoryItemId) != null)
+            if (selectedItem.InventoryItemId != virtualPurchases[index].Rewards[0].Item.GetReferencedConfigurationItem().Id)
             {
                 selectedButton.interactable = true;
             }
@@ -180,7 +209,7 @@ public class CarrouselHandler : MonoBehaviour
 
     private void SetSlingerCurrencyType(string selectedCurrencyId)
     {
-        if (index == 0 || HasCurrentItem())
+        if (HasCurrentItem())
         {
             gemGO.SetActive(false);
             coinGO.SetActive(false);

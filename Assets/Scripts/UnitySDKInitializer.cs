@@ -5,6 +5,9 @@ using UnityEngine;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
 using System.Threading.Tasks;
+using static UnityEditor.Progress;
+using Unity.Services.Economy.Model;
+using Unity.Services.Economy;
 
 public class UnitySDKInitializer : MonoBehaviour
 {
@@ -75,6 +78,12 @@ public class UnitySDKInitializer : MonoBehaviour
         catch (RequestFailedException requestFailed)
         {
             Debug.LogError($"{requestFailed.ErrorCode}");
+        }
+
+        if (PlayerPrefs.GetString("firstLoggin", string.Empty) != "falopa")
+        {
+            PlayersInventoryItem createdInventoryItem = await EconomyService.Instance.PlayerInventory.AddInventoryItemAsync("SLINGER_0");
+            PlayerPrefs.SetString("firstLoggin", "true");
         }
     }
     #endregion
