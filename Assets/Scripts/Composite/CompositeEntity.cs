@@ -2,17 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CompositeEntity : MonoBehaviour
+public abstract class CompositeEntity : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    #region PUBLIC_FIELDS
+    public string id = string.Empty;
+    #endregion
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    #region PUBLIC_METHODS
+    public abstract void Init(object data);
+    public virtual CompositeEntity GetChild(string id) { return null; }
+    #endregion
 }

@@ -147,7 +147,10 @@ public class CarrouselHandler : MonoBehaviour
             SetSlingerPrice(virtualPurchases[index].Costs.Count == 0 ? 0 : virtualPurchases[index].Costs[0].Amount);
             SetSlingerCurrencyType(virtualPurchases[index].Costs.Count == 0 ? "owned" : virtualPurchases[index].Costs[0].Item.GetReferencedConfigurationItem().Id);
         }
-        totalSlingersTxt.text = (index+1) + "/" + virtualPurchases.Count;
+        if (virtualPurchases != null)
+        {
+            totalSlingersTxt.text = (index + 1) + "/" + virtualPurchases.Count;
+        }
     }
 
     private void SelectSlinger()

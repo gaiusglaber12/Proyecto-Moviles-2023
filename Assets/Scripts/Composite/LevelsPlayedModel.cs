@@ -1,0 +1,45 @@
+using System;
+using System.Collections.Generic;
+using Newtonsoft.Json;
+
+[Serializable]
+public class DificultyModel
+{
+    #region PRIVATE_FIELDS
+    [JsonRequired] private string dificulty = string.Empty;
+    [JsonRequired] private int reachedStars = 0;
+    [JsonRequired] private int maxScore = 0;
+    #endregion
+
+    #region PROPERTIES
+    public string Dificulty { get => dificulty; set => dificulty = value; }
+    public int ReachedStars { get => reachedStars; set => reachedStars = value; }
+    public int MaxScore { get => maxScore; set => maxScore = value; }
+    #endregion
+}
+
+[Serializable]
+public class LevelPlayedModel
+{
+    #region PRIVATE_FIELDS
+    [JsonRequired] private int level = 0;
+    [JsonRequired] private List<DificultyModel> dificulties = null;
+    #endregion
+
+    #region PROPERTIES
+    [JsonIgnore] public int Level { get => level; set => level = value; }
+    public List<DificultyModel> Dificulties { get => dificulties; set => dificulties = value; }
+    #endregion
+}
+
+[Serializable]
+public class LevelsPlayedModel
+{
+    #region PRIVATE_FIELDS
+    [JsonRequired] private List<LevelsPlayedModel> levelsPlayedModels = null;
+    #endregion
+
+    #region PROPERTIES
+    [JsonIgnore] public List<LevelsPlayedModel> LevelsPlayedModels { get => levelsPlayedModels; set => levelsPlayedModels = value; }
+    #endregion
+}
