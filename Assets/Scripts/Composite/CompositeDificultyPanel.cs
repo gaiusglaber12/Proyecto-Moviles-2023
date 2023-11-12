@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CompositeDificultyPanel<TComposite> : CompositeEntity where TComposite : CompositeStarPanel
+public class CompositeDificultyPanel : CompositeEntity
 {
     #region EXPOSED_FIELDS
-    [SerializeField] private TComposite compositeStartPanels = null;
+    [SerializeField] private CompositeStarPanel compositeStartPanels = null;
     [SerializeField] private Image panelImg = null;
     [SerializeField] private TMPro.TMP_Text dificultyText = null;
     #endregion
@@ -15,7 +15,7 @@ public class CompositeDificultyPanel<TComposite> : CompositeEntity where TCompos
     #region PUBLIC_METHODS
     public override void Init(object data = null)
     {
-        LevelPlayedModel dificultyEnum = data as LevelPlayedModel;
+        DificultyModel dificultyEnum = data as DificultyModel;
         switch (dificultyEnum.Dificulty)
         {
             case "EASY":

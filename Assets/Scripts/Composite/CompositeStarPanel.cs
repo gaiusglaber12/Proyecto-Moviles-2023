@@ -18,10 +18,11 @@ public class CompositeStarPanel : CompositeEntity
     #region PUBLIC_METHODS
     public override void Init(object data)
     {
-        LevelPlayedModel levelPlayedModel = data as LevelPlayedModel;
+        DificultyModel levelPlayedModel = data as DificultyModel;
+        scoreTxt.text = "MAX SCORE: ";
         if (levelPlayedModel.MaxScore != 0)
         {
-            scoreTxt.text = levelPlayedModel.MaxScore.ToString();
+            scoreTxt.text += levelPlayedModel.MaxScore.ToString();
             switch (levelPlayedModel.ReachedStars)
             {
                 case 0:

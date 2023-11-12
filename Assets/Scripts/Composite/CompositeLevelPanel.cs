@@ -1,27 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.UI;
 using UnityEngine;
 
-public class CompositeLevelPanel<TComposites> : CompositeEntity where TComposites : List<CompositeDificultyPanel<CompositeStarPanel>>
+public class CompositeLevelPanel : CompositeEntity
 {
     #region EXPOSED_FIELDS
-    [SerializeField] private TComposites compositesDificultyPanels;
+    [SerializeField] private CompositeDificultyPanel compositesDificultyPanelPrefab;
     [SerializeField] private TMPro.TMP_Text levelTxt = null;
+    [SerializeField] private Transform dificultyHolder = null;
     #endregion
 
     #region PUBLIC_METHODS
-    public override CompositeEntity GetChild(string id)
-    {
-        return compositesDificultyPanels.Find((composite) => composite.id == id);
-    }
-
     public override void Init(object data)
     {
-        LevelPlayedModel levelPlayedModel = data as LevelPlayedModel;
-        levelTxt.text = levelPlayedModel.Level.ToString();
-        for (int i = 0; i < compositesDificultyPanels.Count; i++)
+        if (data == null)
         {
-            compositesDificultyPanels[i].Init(levelPlayedModel);
+            GameObject go = Instantiate(compositesDificultyPanelPrefab.gameObject, dificultyHolder);
+            var instantiatedDificultyPanel = go.GetComponent<CompositeDificultyPanel>();
+            instantiatedDificultyPanel.Init(new DificultyModel()
+            {
+                Dificulty = "EASY",
+                MaxScore = 0,
+                ReachedStars = 0
+            });
+        }
+        else
+        {
+            LevelPlayedModel levelPlayedModel = data as LevelPlayedModel;
+            levelTxt.text = levelPlayedModel.Level.ToString();
+
         }
     }
     #endregion
