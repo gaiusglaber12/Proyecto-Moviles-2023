@@ -137,6 +137,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 
   animator: {fileID: 0}
+  dificultyBtn: {fileID: 7135465291159018855}
   compositeStartPanels: {fileID: 880149065497296112}
   panelImg: {fileID: 5968883850075429938}
   dificultyText: {fileID: 7933078875146650387}

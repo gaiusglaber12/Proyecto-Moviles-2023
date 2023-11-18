@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Build;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class LevelSelectorPanel : MonoBehaviour
 {
@@ -14,8 +15,10 @@ public class LevelSelectorPanel : MonoBehaviour
     [SerializeField] private GameObject unplayedLevelsPrefab = null;
     [SerializeField] private int maxLevelsPerPage = 12;
     [SerializeField] private Transform goHolder = null;
+    [SerializeField] private Button skinShopBtn = null;
     #endregion
 
+    #region UNITY_CALLS
     public void Awake()
     {
         string levelsPlayedRaw = PlayerPrefs.GetString(levelsSavedKey, string.Empty);
@@ -30,4 +33,24 @@ public class LevelSelectorPanel : MonoBehaviour
             }
         }
     }
+    #endregion
+
+    #region PUBLIC_METHODS
+    public void ChangeScene(string sceneName)
+    {
+        StartCoroutine(StartChangeScene());
+        IEnumerator StartChangeScene()
+        {
+            skinShopBtn.interactable = false;
+            var op = SceneManager.LoadSceneAsync("SkinsSelector", LoadSceneMode.Additive);
+            while (!op.isDone)
+            {
+                yield return null;
+            }
+
+            SceneManager.SetActiveScene(SceneManager.GetSceneByName("SkinsSelector"));
+            SceneManager.UnloadSceneAsync("LevelSelector");
+        }
+    }
+    #endregion
 }

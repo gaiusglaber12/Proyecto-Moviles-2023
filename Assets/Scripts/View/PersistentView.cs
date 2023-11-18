@@ -5,9 +5,24 @@ using UnityEngine;
 using Unity.Services.Economy.Model;
 using Unity.Services.Economy;
 using System.Threading.Tasks;
+using UnityEngine.UI;
 
 public class PersistentView : MonoBehaviour
 {
+    #region EXPOSED_FIELDS
+    [SerializeField] private GameObject currenciesHolder = null;
+    [SerializeField] private List<CurrencyView> currencyViews = null;
+    [SerializeField] private Scrollbar loadingBar = null;
+    [SerializeField] private GameObject barHolder = null;
+    [SerializeField] private CanvasGroup backgroundImg = null;
+    [SerializeField] private float backgroundSpeed = 0.3f;
+    #endregion
+
+    #region PRIVATE_FIELDS}
+    private List<PlayerBalance> playerBalances = null;
+    #endregion
+
+    #region UNITY_CALLS
     public static PersistentView Instance { get; private set; }
     private void Awake()
     {
@@ -22,13 +37,6 @@ public class PersistentView : MonoBehaviour
             Instance = this;
         }
     }
-
-    #region EXPOSED_FIELDS
-    [SerializeField] private List<CurrencyView> currencyViews = null;
-    #endregion
-
-    #region PRIVATE_FIELDS}
-    private List<PlayerBalance> playerBalances = null;
     #endregion
 
     #region PUBLIC_METHODS
@@ -73,6 +81,11 @@ public class PersistentView : MonoBehaviour
             }
         }
         return 0;
+    }
+
+    public void ToggleView(bool toggle)
+    {
+        currenciesHolder.SetActive(toggle);
     }
     #endregion
 }

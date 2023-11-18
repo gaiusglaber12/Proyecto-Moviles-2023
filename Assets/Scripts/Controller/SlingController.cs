@@ -149,7 +149,7 @@ public class SlingController : MonoBehaviour
     #region PUBLIC_METHODS
     public void OnSpawn()
     {
-        onSpawned.Invoke();
+        onSpawned?.Invoke();
 
         Animator animator = GetComponent<Animator>();
         if (animator != null)

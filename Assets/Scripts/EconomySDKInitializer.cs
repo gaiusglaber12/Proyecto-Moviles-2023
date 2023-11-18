@@ -20,6 +20,11 @@ public class EconomySDKInitializer : MonoBehaviour
         {
             await EconomyService.Instance.Configuration.SyncConfigurationAsync();
             await GetUserBalance();
+            if (PlayerPrefs.GetString("firstLoggin", string.Empty) != "logged")
+            {
+                PlayersInventoryItem createdInventoryItem = await EconomyService.Instance.PlayerInventory.AddInventoryItemAsync("SLINGER_0");
+                PlayerPrefs.SetString("firstLoggin", "logged");
+            }
         }
         catch (Exception e)
         {

@@ -19,6 +19,7 @@ public class BannerAdvertisementHandler : MonoBehaviour
         _adUnitId = _androidAdUnitId;
 #endif
         Advertisement.Banner.SetPosition(_bannerPosition);
+        Debug.Log("BannerHandler initialized");
     }
 
     // Implement a method to call when the Load Banner button is clicked:
@@ -28,11 +29,12 @@ public class BannerAdvertisementHandler : MonoBehaviour
         BannerLoadOptions options = new BannerLoadOptions
         {
             loadCallback = OnBannerLoaded,
-            errorCallback = OnBannerError
+            errorCallback = OnBannerError,
         };
 
         // Load the Ad Unit with banner content:
         Advertisement.Banner.Load(_adUnitId, options);
+        Debug.Log("BannerHandler loaded");
         ShowBannerAd();
     }
     #endregion
@@ -58,11 +60,12 @@ public class BannerAdvertisementHandler : MonoBehaviour
         {
             clickCallback = OnBannerClicked,
             hideCallback = OnBannerHidden,
-            showCallback = OnBannerShown
+            showCallback = OnBannerShown,
         };
 
         // Show the loaded Banner Ad Unit:
         Advertisement.Banner.Show(_adUnitId, options);
+        Debug.Log("on banner ad shown called");
     }
 
     // Implement a method to call when the Hide Banner button is clicked:
@@ -72,9 +75,18 @@ public class BannerAdvertisementHandler : MonoBehaviour
         Advertisement.Banner.Hide();
     }
 
-    private void OnBannerClicked() { }
-    private void OnBannerShown() { }
-    private void OnBannerHidden() { }
+    private void OnBannerClicked()
+    {
+        Debug.Log("Banner ad clicked");
+    }
+    private void OnBannerShown()
+    {
+        Debug.Log("Banner ad shown");
+    }
+    private void OnBannerHidden()
+    {
+        Debug.Log("Banner ad hidden");
+    }
     #endregion
 }
 

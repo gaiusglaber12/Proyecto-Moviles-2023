@@ -1,3 +1,4 @@
+using GooglePlayGames;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -5,6 +6,7 @@ using TMPro;
 using Unity.Services.Economy;
 using Unity.Services.Economy.Model;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class CarrouselHandler : MonoBehaviour
@@ -27,10 +29,14 @@ public class CarrouselHandler : MonoBehaviour
     [SerializeField] private Button selectedButton = null;
     [SerializeField] private TMP_Text priceTxt = null;
     [SerializeField] private GameObject loadingHolder = null;
+
+    [SerializeField] private Button leftButton = null;
+    [SerializeField] private Button rightButton = null;
+    [SerializeField] private Button goBackBtn = null;
     #endregion
 
     #region PRIVATE_FIELDS
-    private int index = 1;
+    private int index = 0;
     private List<VirtualPurchaseDefinition> virtualPurchases = null;
     private List<PlayersInventoryItem> playerItems = null;
     private bool cachedDirection = false;
@@ -43,12 +49,14 @@ public class CarrouselHandler : MonoBehaviour
     #endregion
 
     #region UNITY_CALLS
-    private IEnumerator Start()
+    private async void Start()
     {
+        await GetInventory();
+        virtualPurchases = EconomyService.Instance.Configuration.GetVirtualPurchases();
+        PersistentView.Instance.ToggleView(true);
         slingController.OnSpawned = ConfigureSlinger;
-        yield return new WaitForSeconds(5); //DEBUG
-        virtualPurchases = EconomyService.Instance.Configuration.GetVirtualPurchases();//DEBUG
-        GetInventory();
+        leftButton.interactable = true;
+        rightButton.interactable = true;
         totalSlingersTxt.text = "1/" + virtualPurchases.Count;
     }
     #endregion
@@ -58,6 +66,23 @@ public class CarrouselHandler : MonoBehaviour
     {
         cachedDirection = direction;
         slingController.SetDespawnAnim();
+    }
+
+    public void ChangeScene(string sceneName)
+    {
+        goBackBtn.interactable = false;
+        StartCoroutine(StartChangeScene());
+        IEnumerator StartChangeScene()
+        {
+            var op = SceneManager.LoadSceneAsync("LevelSelector", LoadSceneMode.Additive);
+            while (!op.isDone)
+            {
+                yield return null;
+            }
+
+            SceneManager.SetActiveScene(SceneManager.GetSceneByName("LevelSelector"));
+            SceneManager.UnloadSceneAsync("SkinsSelector");
+        }
     }
     #endregion
 
@@ -103,6 +128,8 @@ public class CarrouselHandler : MonoBehaviour
             selectedButton.interactable = false;
         });
 
+        leftButton.interactable = true;
+        rightButton.interactable = true;
         Debug.LogWarning(" INITIALIZED ");
     }
 
@@ -119,6 +146,33 @@ public class CarrouselHandler : MonoBehaviour
 
         SetSlingerPrice(virtualPurchases[index].Costs.Count == 0 ? 0 : virtualPurchases[index].Costs[0].Amount);
         SetSlingerCurrencyType(virtualPurchases[index].Costs.Count == 0 ? "owned" : virtualPurchases[index].Costs[0].Item.GetReferencedConfigurationItem().Id);
+
+        string firstPurchase = PlayerPrefs.GetString("firstPurchase", string.Empty);
+        if (firstPurchase != string.Empty)
+        {
+            PlayerPrefs.SetString("firstPurchase", "true");
+            PlayGamesPlatform.Instance.UnlockAchievement("CgkI - NmMitEJEAIQAQ",
+                (callback) =>
+                {
+                    PlayGamesPlatform.Instance.IncrementAchievement(
+                        "CgkI-NmMitEJEAIQAQ", 500, (bool success) =>
+                        {
+                            PlayGamesPlatform.Instance.RevealAchievement("CgkI - NmMitEJEAIQAQ");
+                            Social.ReportProgress("CgkI-NmMitEJEAIQAQ", 500,
+                                (state) =>
+                                {
+                                    if (state)
+                                    {
+                                        Debug.Log("achievement unlocked succefully");
+                                    }
+                                    else
+                                    {
+                                        Debug.Log("achievement dont unlocked succefully");
+                                    }
+                                });
+                        });
+                });
+        }
         loadingHolder.SetActive(false);
     }
 
@@ -151,11 +205,6 @@ public class CarrouselHandler : MonoBehaviour
         {
             totalSlingersTxt.text = (index + 1) + "/" + virtualPurchases.Count;
         }
-    }
-
-    private void SelectSlinger()
-    {
-
     }
 
     private void SetWoodMaterial(Material material)

@@ -4,8 +4,7 @@ using UnityEngine.Advertisements;
 public class AdvertisementSDKInitializer : MonoBehaviour, IUnityAdsInitializationListener
 {
     #region EXPOSED_FIELDS
-    [SerializeField] private BannerAdvertisementHandler bannerAdvertisementHandler = null;
-
+    [SerializeField] private RewardedAdsButton rewardedAdsButton = null;
     [SerializeField] string _androidGameId;
     [SerializeField] string _iOSGameId;
     [SerializeField] bool _testMode = true;
@@ -28,8 +27,6 @@ public class AdvertisementSDKInitializer : MonoBehaviour, IUnityAdsInitializatio
         if (!Advertisement.isInitialized && Advertisement.isSupported)
         {
             Advertisement.Initialize(_gameId, _testMode, this);
-            bannerAdvertisementHandler.Init();
-            bannerAdvertisementHandler.LoadBanner();
         }
     }
 
@@ -37,6 +34,7 @@ public class AdvertisementSDKInitializer : MonoBehaviour, IUnityAdsInitializatio
     public void OnInitializationComplete()
     {
         Debug.Log("Unity Ads initialization complete.");
+        rewardedAdsButton.LoadAd();
     }
 
     public void OnInitializationFailed(UnityAdsInitializationError error, string message)

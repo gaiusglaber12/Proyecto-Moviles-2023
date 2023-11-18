@@ -5,9 +5,11 @@ using UnityEngine;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
 using System.Threading.Tasks;
-using static UnityEditor.Progress;
 using Unity.Services.Economy.Model;
 using Unity.Services.Economy;
+using GooglePlayGames;
+using GooglePlayGames.BasicApi;
+using Unity.VisualScripting.Antlr3.Runtime;
 
 public class UnitySDKInitializer : MonoBehaviour
 {
@@ -21,12 +23,15 @@ public class UnitySDKInitializer : MonoBehaviour
     {
         try
         {
+#if !UNITY_EDITOR
+            PlayGamesPlatform.Activate();
             await UnityServices.InitializeAsync();
-            SetupEvents();
-
+            PlayGamesPlatform.Instance.Authenticate(OnSignInResult);
+#else
+            await UnityServices.InitializeAsync();
             await SignInAnonymously();
-            await economySDKInitializer.Init();
-            advertisementSDKInitializer.Init();
+#endif
+
         }
         catch (Exception e)
         {
@@ -36,6 +41,7 @@ public class UnitySDKInitializer : MonoBehaviour
     #endregion
 
     #region PRIVATE_METHODS
+
     // Setup authentication event handlers if desired
     private void SetupEvents()
     {
@@ -70,20 +76,56 @@ public class UnitySDKInitializer : MonoBehaviour
         try
         {
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
+            await economySDKInitializer.Init();
+            advertisementSDKInitializer.Init();
         }
         catch (AuthenticationException ex)
         {
             Debug.LogError($"{ex.Message}");
+            throw;
         }
         catch (RequestFailedException requestFailed)
         {
             Debug.LogError($"{requestFailed.ErrorCode}");
+            throw;
         }
+    }
 
-        if (PlayerPrefs.GetString("firstLoggin", string.Empty) != "falopa")
+    private async Task AuthenticateWithUnity(string token)
+    {
+        try
         {
-            PlayersInventoryItem createdInventoryItem = await EconomyService.Instance.PlayerInventory.AddInventoryItemAsync("SLINGER_0");
-            PlayerPrefs.SetString("firstLoggin", "true");
+            await AuthenticationService.Instance.SignInWithGooglePlayGamesAsync(token);
+            await economySDKInitializer.Init();
+            advertisementSDKInitializer.Init();//
+        }
+        catch (AuthenticationException ex)
+        {
+            Debug.LogException(ex);
+            throw;
+        }
+        catch (RequestFailedException ex)
+        {
+            Debug.LogException(ex);
+            throw;
+        }
+    }
+
+    private void OnSignInResult(SignInStatus signInStatus)
+    {
+        if (signInStatus == SignInStatus.Success)
+        {
+            Debug.Log("Initialized game services");
+            PlayGamesPlatform.Instance.RequestServerSideAccess(true,
+                (code) =>
+                {
+                    Debug.Log("Auth code is: " + code);
+                    AuthenticateWithUnity(code);
+                });
+        }
+        else
+        {
+            Debug.LogError("cant initialized game services reason: " + signInStatus);
         }
     }
     #endregion

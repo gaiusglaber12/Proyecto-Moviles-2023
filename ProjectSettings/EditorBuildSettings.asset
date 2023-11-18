@@ -6,8 +6,20 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/ToastTest.unity
-    guid: 2b05b72bd5273bb498e24dbdd80fb242
+    path: Assets/Scenes/SkinsSelector.unity
+    guid: 46ea7fdc8907d0441a514b220bef0d60
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 8f4bb7f7940f6464f8f9f638dc152c11
+  - enabled: 1
+    path: Assets/Scenes/Persistent.unity
+    guid: 22313426e114f12409112187c49c663e
+  - enabled: 1
+    path: Assets/Scenes/LevelSelector.unity
+    guid: 87fe74fdef8be834580ce46e434ac8c7
+  - enabled: 1
+    path: Assets/Scenes/Gameplay.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: a5f4923a732739740903e6b4e6ad7ce8, type: 2}
     com.unity.localization.addressable-group-rules: {fileID: 11400000, guid: 86f11a5857e3cd149bcc95b3b4041b13, type: 2}
