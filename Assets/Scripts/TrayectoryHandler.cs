@@ -1,47 +1,32 @@
 using System.Collections.Generic;
-
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class TrayectoryHandler : MonoBehaviour
 {
     #region EXPOSED_FIELDS
-    [SerializeField] private GameObject trayectoryRenderGo = null;
-
-    [SerializeField] private Transform trayectoryHolder = null;
+    [SerializeField] private LineRenderer lineRenderer = null;
     [SerializeField] private int ammountOfRenders = 0;
+    [SerializeField] private SlingController slingController = null;
     #endregion
 
     #region PRIVATE_FIELDS
-    private GameObject go = null;
-
     private Vector3 initialPoint = Vector3.zero;
     private Vector3 heightValue = Vector3.zero;
     private Vector3 depthValue = Vector3.zero;
-
-    private List<GameObject> trayectoryGos = null;
     #endregion
 
     #region UNITY_CALLS
     private void Update()
     {
-        SetTrayectoryGos();
+        SetLineVertex();
+        SetLineColor();
     }
     #endregion
 
     #region PUBLIC_METHODS
-    public void Init(GameObject go)
-    {
-        this.go = go;
-        trayectoryGos = new List<GameObject>();
-        for (int i = 0; i < ammountOfRenders; i++)
-        {
-            GameObject actualGo = Instantiate(trayectoryRenderGo);
-            actualGo.transform.parent = trayectoryHolder;
-            trayectoryGos.Add(actualGo);
-        }
-    }
-
-    public void DrawTrayectory(Vector3 initialPoint, Vector3 heightValue, Vector3 depthValue)
+    public void SetMatrix(Vector3 initialPoint, Vector3 heightValue, Vector3 depthValue)
     {
         this.initialPoint = initialPoint;
         this.heightValue = heightValue;
@@ -51,14 +36,7 @@ public class TrayectoryHandler : MonoBehaviour
 
     public void ToggleTrayectory(bool toggle)
     {
-        if (trayectoryGos == null)
-        {
-            return;
-        }
-        for (int i = 0; i < ammountOfRenders; i++)
-        {
-            trayectoryGos[i].SetActive(toggle);
-        }
+        lineRenderer.positionCount = toggle ? ammountOfRenders : 0;
     }
     #endregion
 
@@ -70,17 +48,32 @@ public class TrayectoryHandler : MonoBehaviour
         return Vector3.Lerp(ac, cb, t);
     }
 
-    private void SetTrayectoryGos()
+    private Color EvaluateColor(float t)
     {
-        if (trayectoryGos == null)
+        if (t < 0.5f)
         {
-            return;
+            Color gy = Color.Lerp(Color.green, Color.yellow, t * 2);
+            return gy;
         }
+        else
+        {
+            Color yr = Color.Lerp(Color.yellow, Color.red, (t - 0.5f) * 2);
+            return yr;
+        }
+    }
 
-        for (int i = 0; i < trayectoryGos.Count; i++)
+    private void SetLineVertex()
+    {
+        for (int i = 0; i < lineRenderer.positionCount; i++)
         {
-            trayectoryGos[i].transform.position = EvaluatePosition(i / (float)trayectoryGos.Count);
+            lineRenderer.SetPosition(i, EvaluatePosition(i / (float)lineRenderer.positionCount));
         }
+    }
+
+    private void SetLineColor()
+    {
+        lineRenderer.startColor = Color.white;
+        lineRenderer.endColor = EvaluateColor(slingController.CurrDepth * 0.9f / slingController.MaxDepth);
     }
     #endregion
 }

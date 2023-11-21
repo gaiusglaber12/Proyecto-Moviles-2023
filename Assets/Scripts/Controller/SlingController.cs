@@ -39,11 +39,15 @@ public class SlingController : MonoBehaviour
     private bool onDespawnTransition = false;
 
     private Action onSpawned = null;
+    private float yOffset = 0.0f;
     #endregion
 
     #region PROPERTIES
     public bool OnDespawnTransition { get => onDespawnTransition; set => onDespawnTransition = value; }
     public Action OnSpawned { get => onSpawned; set => onSpawned = value; }
+    public float MaxDepth { get => maxScale; }
+    public float MinDepth { get => minScale; }
+    public float CurrDepth { get => yOffset; }
     #endregion
 
     #region UNITY_CALLS
@@ -54,8 +58,6 @@ public class SlingController : MonoBehaviour
 
         lerpToEuler = transform.eulerAngles;
         initialRotation = transform.eulerAngles;
-        if (trayectoryHandler != null)
-            trayectoryHandler.Init(null);
     }
     private void Update()
     {
@@ -65,14 +67,7 @@ public class SlingController : MonoBehaviour
         LerpBandEuler(lerpToEuler);
         if (elasticBand.localScale.x > minScale)
         {
-            if (trayectoryHandler != null)
-                trayectoryHandler.ToggleTrayectory(true);
             CalculateTrayectory();
-        }
-        else
-        {
-            if (trayectoryHandler != null)
-                trayectoryHandler.ToggleTrayectory(false);
         }
     }
     #endregion
@@ -80,7 +75,7 @@ public class SlingController : MonoBehaviour
     #region PRIVATE_METHODS
     private void CalculateTrayectory()
     {
-        Vector3 trayectoryDepthValue = new Vector3(transform.position.x * (transform.forward.x * elasticBand.localScale.z * depthTrayectoryOffset), center.transform.position.y,
+        Vector3 trayectoryDepthValue = new Vector3(transform.position.x - (transform.forward.x * elasticBand.localScale.z * depthTrayectoryOffset), center.transform.position.y,
             transform.position.z * (-transform.forward.z * elasticBand.localScale.z * depthTrayectoryOffset));
 
         trayectoryDepthValue = new Vector3(trayectoryDepthValue.x, Mathf.Clamp(trayectoryDepthValue.y, center.transform.position.y, float.MaxValue),
@@ -90,15 +85,15 @@ public class SlingController : MonoBehaviour
 
         trayectoryHeightValue /= 2;
         trayectoryHeightValue += center.position;
-        trayectoryHeightValue.y += 10 * elasticBand.localScale.z;
+        trayectoryHeightValue.y += yTrayectoryOffset * elasticBand.localScale.z;
 
         if (trayectoryHandler != null)
-            trayectoryHandler.DrawTrayectory(center.position, trayectoryHeightValue, trayectoryDepthValue);
+            trayectoryHandler.SetMatrix(center.position, trayectoryHeightValue, trayectoryDepthValue);
     }
 
     private void CalculateBandMovement(Vector3 tapActualPosition)
     {
-        float yOffset = tapInitialPosition.y - tapActualPosition.y;
+        yOffset = tapInitialPosition.y - tapActualPosition.y;
         float xOffset = tapInitialPosition.x - tapActualPosition.x;
 
         lerpToScale = elasticBand.localScale;
@@ -122,6 +117,7 @@ public class SlingController : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             tapInitialPosition = Input.mousePosition;
+            trayectoryHandler.ToggleTrayectory(true);
         }
 
         if (Input.GetMouseButton(0))
@@ -133,6 +129,7 @@ public class SlingController : MonoBehaviour
         {
             lerpToScale = initialScale;
             lerpToEuler = initialRotation;
+            trayectoryHandler.ToggleTrayectory(false);
         }
     }
 
