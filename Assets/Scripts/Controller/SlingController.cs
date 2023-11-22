@@ -1,11 +1,11 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SlingController : MonoBehaviour
 {
     #region EXPOSED_FIELDS
     [SerializeField] private TrayectoryHandler trayectoryHandler = null;
+
     [SerializeField] private Transform elasticBand = null;
     [SerializeField] private Transform center = null;
     [SerializeField] private float bounceOffset = 0;
@@ -25,9 +25,18 @@ public class SlingController : MonoBehaviour
     [Header("Trayectory")]
     [SerializeField] private float yTrayectoryOffset = 0.0f;
     [SerializeField] private float depthTrayectoryOffset = 0.0f;
+
+    [Header("Shoot")]
+    [SerializeField] private float minShootingDepth = 0.3f;
+    [SerializeField] private float forceOffset = 1.0f;
     #endregion
 
     #region PRIVATE_FIELDS
+    private BallEntity ballPrefab = null;
+
+    private Vector3 trayectoryDepthValue = Vector3.zero;
+    private Vector3 trayectoryHeightValue = Vector3.zero;
+
     private Vector3 tapInitialPosition = Vector3.zero;
 
     private Vector3 lerpToScale = Vector3.zero;
@@ -75,13 +84,13 @@ public class SlingController : MonoBehaviour
     #region PRIVATE_METHODS
     private void CalculateTrayectory()
     {
-        Vector3 trayectoryDepthValue = new Vector3(transform.position.x - (transform.forward.x * elasticBand.localScale.z * depthTrayectoryOffset), center.transform.position.y,
+        trayectoryDepthValue = new Vector3(transform.position.x - (transform.forward.x * elasticBand.localScale.z * depthTrayectoryOffset), center.transform.position.y,
             transform.position.z * (-transform.forward.z * elasticBand.localScale.z * depthTrayectoryOffset));
 
         trayectoryDepthValue = new Vector3(trayectoryDepthValue.x, Mathf.Clamp(trayectoryDepthValue.y, center.transform.position.y, float.MaxValue),
             Mathf.Clamp(trayectoryDepthValue.z, center.transform.position.z, float.MaxValue));
 
-        Vector3 trayectoryHeightValue = trayectoryDepthValue - center.position;
+        trayectoryHeightValue = trayectoryDepthValue - center.position;
 
         trayectoryHeightValue /= 2;
         trayectoryHeightValue += center.position;
@@ -127,6 +136,11 @@ public class SlingController : MonoBehaviour
 
         if (Input.GetMouseButtonUp(0))
         {
+            if (CurrDepth > minShootingDepth)
+            {
+                ShootBall();
+            }
+
             lerpToScale = initialScale;
             lerpToEuler = initialRotation;
             trayectoryHandler.ToggleTrayectory(false);
@@ -141,9 +155,28 @@ public class SlingController : MonoBehaviour
     {
         transform.eulerAngles = Vector3.Lerp(transform.eulerAngles, endEuler, eulerLerperSpeed);
     }
+
+    private void ShootBall()
+    {
+        GameObject ball = Instantiate(ballPrefab.gameObject, center.position, Quaternion.identity);
+        Vector3 force = new Vector3(trayectoryDepthValue.x, trayectoryHeightValue.y, trayectoryDepthValue.z);
+        ball.transform.LookAt(force);
+        ball.GetComponent<Rigidbody>().AddForce(force * forceOffset);
+        ball.GetComponent<Animation>().PlayQueued("Roll", QueueMode.PlayNow);
+        for (int i = 0; i < 10; i++)
+        {
+            ball.GetComponent<Animation>().PlayQueued("Roll");
+        }
+        Destroy(ball, 5);
+    }
     #endregion
 
     #region PUBLIC_METHODS
+    public void InitGameplay(BallEntity ballEntity)
+    {
+        this.ballPrefab = ballEntity;
+    }
+
     public void OnSpawn()
     {
         onSpawned?.Invoke();

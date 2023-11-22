@@ -72,7 +72,7 @@ public class TrayectoryHandler : MonoBehaviour
 
     private void SetLineColor()
     {
-        lineRenderer.startColor = Color.white;
+        lineRenderer.startColor = EvaluateColor(slingController.CurrDepth * 0.9f / slingController.MaxDepth);
         lineRenderer.endColor = EvaluateColor(slingController.CurrDepth * 0.9f / slingController.MaxDepth);
     }
     #endregion

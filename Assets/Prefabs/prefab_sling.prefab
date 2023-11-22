@@ -270,12 +270,14 @@ MonoBehaviour:
   maxScale: 1.8
   scaleOffset: 0.009
   scaleLerperSpeed: 0.08
-  minEuler: 140
-  maxEuler: 210
+  minEuler: 130
+  maxEuler: 230
   eulerOffset: 5
   eulerLerperSpeed: 0.1
-  yTrayectoryOffset: 5
-  depthTrayectoryOffset: 5
+  yTrayectoryOffset: 4
+  depthTrayectoryOffset: 2.5
+  minShootingDepth: 0.3
+  forceOffset: 49.85
 --- !u!114 &7670483687016552252
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1041,7 +1043,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 123ac6dc79004e54b8b352a7e64acdca, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
