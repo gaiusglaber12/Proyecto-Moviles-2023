@@ -24,6 +24,8 @@ public class PersistentView : MonoBehaviour
 
     #region UNITY_CALLS
     public static PersistentView Instance { get; private set; }
+    public static int CurrLevel = 0;
+    public static string CurrStringDificulty = string.Empty;
     private void Awake()
     {
         // If there is an instance, and it's not me, delete myself.
@@ -86,6 +88,21 @@ public class PersistentView : MonoBehaviour
     public void ToggleView(bool toggle)
     {
         currenciesHolder.SetActive(toggle);
+    }
+
+    public LevelConfigSO.DIFICULTY GetCurrentDificultyEnum()
+    {
+        switch (CurrStringDificulty)
+        {
+            case "EASY":
+                return LevelConfigSO.DIFICULTY.EASY;
+            case "NORMAL":
+                return LevelConfigSO.DIFICULTY.NORMAL;
+            case "HARD":
+                return LevelConfigSO.DIFICULTY.HARD;
+            default:
+                return LevelConfigSO.DIFICULTY.EASY;
+        }
     }
     #endregion
 }

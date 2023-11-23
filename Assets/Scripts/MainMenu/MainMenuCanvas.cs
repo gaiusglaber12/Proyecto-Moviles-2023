@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -8,6 +7,15 @@ public class MainMenuCanvas : MonoBehaviour
 {
     #region EXPOSED_FIELDS
     [SerializeField] private Button playBtn = null;
+    [SerializeField] private Button showConsolseBtn = null;
+    [SerializeField] private ScrollRect scrollView = null;
+    [SerializeField] private TMPro.TMP_InputField inputField = null;
+    [SerializeField] private TMPro.TMP_Text readFileTxt = null;
+
+    #endregion
+
+    #region PRIVATE_FIELDS
+    private bool toggle = false;
     #endregion
 
     #region UNITY_CALLS
@@ -40,6 +48,28 @@ public class MainMenuCanvas : MonoBehaviour
 
             SceneManager.UnloadSceneAsync("MainMenu");
         }
+    }
+
+    public void ToggleConsoleTab()
+    {
+        toggle = !toggle;
+        scrollView.gameObject.SetActive(toggle);
+    }
+
+    public void ReadFile()
+    {
+        readFileTxt.text = FileController.ReadFile();
+    }
+
+    public void WriteFile()
+    {
+        if (inputField.text != string.Empty)
+            FileController.WriteFile(inputField.text + "\n");
+    }
+
+    public void DeleteLogs()
+    {
+        FileController.DeleteFile();
     }
     #endregion
 }

@@ -13,13 +13,10 @@ public class CarrouselHandler : MonoBehaviour
 {
     #region EXPOSED_FIELDS
     [Header("Sling")]
-    [SerializeField] private List<MeshRenderer> woodRenderers = null;
-    [SerializeField] private List<MeshRenderer> slingRenderers = null;
     [SerializeField] private SlingController slingController = null;
 
     [Header("Skins")]
     [SerializeField] private List<SlingSkinConfigsSO> skinConfigsSOs = null;
-
 
     [Header("UI")]
     [SerializeField] private TMPro.TMP_Text totalSlingersTxt = null;
@@ -53,6 +50,9 @@ public class CarrouselHandler : MonoBehaviour
     {
         await GetInventory();
         virtualPurchases = EconomyService.Instance.Configuration.GetVirtualPurchases();
+
+        virtualPurchases.RemoveAll((virtualPurchase) => !virtualPurchase.Id.Contains("slinger") || !virtualPurchase.Id.Contains("SLINGER"));
+
         PersistentView.Instance.ToggleView(true);
         slingController.OnSpawned = ConfigureSlinger;
         leftButton.interactable = true;
@@ -194,8 +194,7 @@ public class CarrouselHandler : MonoBehaviour
                 index = skinConfigsSOs.Count - 1;
             }
         }
-        SetWoodMaterial(skinConfigsSOs[index].WoodMaterial);
-        SetSlingerMaterial(skinConfigsSOs[index].SlingMaterial);
+        slingController.SetSkin(skinConfigsSOs[index].WoodMaterial, skinConfigsSOs[index].SlingMaterial);
         if (virtualPurchases != null)
         {
             SetSlingerPrice(virtualPurchases[index].Costs.Count == 0 ? 0 : virtualPurchases[index].Costs[0].Amount);
@@ -204,22 +203,6 @@ public class CarrouselHandler : MonoBehaviour
         if (virtualPurchases != null)
         {
             totalSlingersTxt.text = (index + 1) + "/" + virtualPurchases.Count;
-        }
-    }
-
-    private void SetWoodMaterial(Material material)
-    {
-        for (int i = 0; i < woodRenderers.Count; i++)
-        {
-            woodRenderers[i].material = material;
-        }
-    }
-
-    private void SetSlingerMaterial(Material material)
-    {
-        for (int i = 0; i < slingRenderers.Count; i++)
-        {
-            slingRenderers[i].material = material;
         }
     }
 

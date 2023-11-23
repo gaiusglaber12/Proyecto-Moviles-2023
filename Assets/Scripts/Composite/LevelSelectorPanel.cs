@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,6 +29,42 @@ public class LevelSelectorPanel : MonoBehaviour
             var instantiatedLevelPanelPrefab = go.GetComponent<CompositeLevelPanel>();
             instantiatedLevelPanelPrefab.Init(null);
             for (int i = 0; i < maxLevelsPerPage - 1; i++)
+            {
+                Instantiate(unplayedLevelsPrefab, goHolder);
+            }
+        }
+        else
+        {
+            LevelsPlayedModel levelsPlayedModel = JsonConvert.DeserializeObject<LevelsPlayedModel>(levelsPlayedRaw);
+
+            if (levelsPlayedModel.LevelsPlayedModels.Count < maxLevelsPerPage)
+            {
+                if (levelsPlayedModel.LevelsPlayedModels[levelsPlayedModel.LevelsPlayedModels.Count - 1].Dificulties.Count > 0) 
+                {
+                    levelsPlayedModel.LevelsPlayedModels.Add(new LevelPlayedModel()
+                        {
+                            Level = levelsPlayedModel.LevelsPlayedModels.Count,
+                            Dificulties = new List<DificultyModel>()
+                            {
+                                new DificultyModel()
+                                {
+                                    Dificulty = "EASY",
+                                    MaxScore= 0,
+                                    ReachedStars = 0
+                                }
+                            }
+                    });
+                }
+            }
+
+            for (int i = 0; i < levelsPlayedModel.LevelsPlayedModels.Count; i++)
+            {
+                GameObject go = Instantiate(levelPanelPrefab.gameObject, goHolder);
+                var instantiatedLevelPanelPrefab = go.GetComponent<CompositeLevelPanel>();
+                instantiatedLevelPanelPrefab.Init(levelsPlayedModel.LevelsPlayedModels[i]);
+            }
+
+            for (int i = 0; i < maxLevelsPerPage - levelsPlayedModel.LevelsPlayedModels.Count - 1; i++)
             {
                 Instantiate(unplayedLevelsPrefab, goHolder);
             }

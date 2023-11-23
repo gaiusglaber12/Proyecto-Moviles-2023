@@ -15,3 +15,14 @@ MonoBehaviour:
   id: -1
   dificulty: 0
   ballPrefab: {fileID: 1397450182287404053, guid: eebe38ecf8a6cb345858a775b38104db, type: 3}
+  cageAnimal: {fileID: 4481923405350597692, guid: eebe38ecf8a6cb345858a775b38104db, type: 3}
+  isAquatic: 0
+  secondsToComplete: 0
+  minScore: 0
+  oneStarScore: 0
+  twoStarScore: 0
+  threeStarScore: 0
+  minAnimalsPerCage: 1
+  maxAnimalsPerCage: 10
+  minCagesPerChunk: 2
+  maxCagesPerChunk: 5

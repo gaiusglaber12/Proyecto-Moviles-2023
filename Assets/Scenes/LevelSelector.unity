@@ -207,8 +207,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 46.4
+  m_fontSizeBase: 46.4
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -293,8 +293,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 76, y: -45.69995}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 184, y: -129}
+  m_SizeDelta: {x: 284.1, y: 96.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &242571060
 MonoBehaviour:
@@ -510,7 +510,7 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1080, y: 2160}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
@@ -778,7 +778,7 @@ GameObject:
   - component: {fileID: 1995839810}
   - component: {fileID: 1995839809}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: bg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -800,8 +800,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 49.558823, y: 0}
-  m_SizeDelta: {x: 268.8568, y: 0}
+  m_AnchoredPosition: {x: 203.00798, y: 0}
+  m_SizeDelta: {x: 1387.679, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1995839809
 MonoBehaviour:
@@ -897,7 +897,7 @@ MonoBehaviour:
   m_ChildAlignment: 4
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 28.78, y: 87.5}
+  m_CellSize: {x: 193.5, y: 285}
   m_Spacing: {x: 54.5, y: 10.67}
   m_Constraint: 1
   m_ConstraintCount: 3

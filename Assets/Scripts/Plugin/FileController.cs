@@ -1,32 +1,28 @@
 using UnityEngine;
 
-public class FileController : MonoBehaviour
+public static class FileController
 {
-    #region EXPOSED_FIELDS
-    [SerializeField] private TMPro.TMP_Text tmp = null;
-    [SerializeField] private PopupController popupController = null;
-    #endregion
-
     #region PRIVATE_FIELDS
     private const string packName = "com.example.unityplugin";
     private const string loggerClassName = "FileController";
 
-    private AndroidJavaClass fileController = null;
-    private AndroidJavaObject fileControllerInstance = null;
+    private static AndroidJavaClass fileController = null;
+    private static AndroidJavaObject fileControllerInstance = null;
     #endregion
 
     #region PUBLIC_METHODS
-    public void ReadFile()
+    public static string ReadFile()
     {
         if (fileControllerInstance == null)
         {
             Init();
         }
         string txt = fileControllerInstance?.Call<string>("ReadFile");
-        tmp.text = txt;
+
+        return txt;
     }
 
-    public void WriteFile(string data)
+    public static void WriteFile(string data)
     {
         if (fileControllerInstance == null)
         {
@@ -35,12 +31,13 @@ public class FileController : MonoBehaviour
         fileControllerInstance?.Call("WriteFile", data);
     }
 
-    public void DeleteFile()
+    public static void DeleteFile()
     {
-        popupController.ShowAlertDialog(new string[] { "Are you sure you want to delete logs?", "deleting logs.txt", "Delete", "Cancel" },
+        PopupController.Init();
+        PopupController.ShowAlertDialog(new string[] { "Are you sure you want to delete logs?", "deleting logs.txt", "Delete", "Cancel" },
             (index) =>
             {
-                Debug.Log("Index of button: "+ index);
+                Debug.Log("Index of button: " + index);
                 if (index == -3)
                 {
                     if (fileControllerInstance == null)
@@ -54,7 +51,7 @@ public class FileController : MonoBehaviour
     #endregion
 
     #region PRIVATE_METHODS
-    private void Init()
+    private static void Init()
     {
 #if UNITY_ANDROID && !UNITY_EDITOR
         fileController = new AndroidJavaClass(packName + "." + loggerClassName);

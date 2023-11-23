@@ -17,28 +17,32 @@ public class CompositeDificultyPanel : CompositeEntity
     #region PUBLIC_METHODS
     public override void Init(object data = null)
     {
-        DificultyModel dificultyEnum = data as DificultyModel;
-        switch (dificultyEnum.Dificulty)
+        LevelPlayedModel levelPlayedModel = (((LevelPlayedModel, DificultyModel))data).Item1;
+        DificultyModel dificultyModel = (((LevelPlayedModel, DificultyModel))data).Item2;
+        switch (dificultyModel.Dificulty)
         {
             case "EASY":
-                dificultyText.text = dificultyEnum.Dificulty;
+                dificultyText.text = dificultyModel.Dificulty;
                 panelImg.color = Color.green;
                 break;
             case "NORMAL":
-                dificultyText.text = dificultyEnum.Dificulty;
+                dificultyText.text = dificultyModel.Dificulty;
                 panelImg.color = Color.yellow;
                 break;
             case "HARD":
-                dificultyText.text = dificultyEnum.Dificulty;
+                dificultyText.text = dificultyModel.Dificulty;
                 panelImg.color = Color.red;
                 break;
         }
 
-        compositeStartPanels.Init(dificultyEnum);
+        compositeStartPanels.Init(dificultyModel);
 
         dificultyBtn.onClick.AddListener(
             () =>
             {
+                PersistentView.CurrLevel = levelPlayedModel.Level;
+                PersistentView.CurrStringDificulty = dificultyModel.Dificulty;
+
                 dificultyBtn.interactable = false;
                 StartCoroutine(StartChangeScene());
                 IEnumerator StartChangeScene()

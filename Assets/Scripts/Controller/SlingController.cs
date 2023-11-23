@@ -1,9 +1,13 @@
+using CandyCoded.HapticFeedback;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SlingController : MonoBehaviour
 {
     #region EXPOSED_FIELDS
+    [SerializeField] private List<MeshRenderer> woodRenderers = null;
+    [SerializeField] private List<MeshRenderer> slingRenderers = null;
     [SerializeField] private TrayectoryHandler trayectoryHandler = null;
 
     [SerializeField] private Transform elasticBand = null;
@@ -46,6 +50,7 @@ public class SlingController : MonoBehaviour
     private Vector3 initialRotation = Vector3.zero;
 
     private bool onDespawnTransition = false;
+    private bool onVibrated = false;
 
     private Action onSpawned = null;
     private float yOffset = 0.0f;
@@ -117,6 +122,16 @@ public class SlingController : MonoBehaviour
         xOffset += normalYEuler;
         xOffset = Mathf.Clamp(xOffset, minEuler, maxEuler);
 
+        if (yOffset >= maxScale && !onVibrated)
+        {
+            HapticFeedback.LightFeedback();
+            onVibrated = true;
+        }
+        else
+        {
+            onVibrated = false;
+        }
+
         lerpToEuler.y = xOffset;
         lerpToScale.z = yOffset;
     }
@@ -126,7 +141,8 @@ public class SlingController : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             tapInitialPosition = Input.mousePosition;
-            trayectoryHandler.ToggleTrayectory(true);
+            if (trayectoryHandler)
+                trayectoryHandler.ToggleTrayectory(true);
         }
 
         if (Input.GetMouseButton(0))
@@ -143,7 +159,8 @@ public class SlingController : MonoBehaviour
 
             lerpToScale = initialScale;
             lerpToEuler = initialRotation;
-            trayectoryHandler.ToggleTrayectory(false);
+            if (trayectoryHandler)
+                trayectoryHandler.ToggleTrayectory(false);
         }
     }
 
@@ -172,6 +189,28 @@ public class SlingController : MonoBehaviour
     #endregion
 
     #region PUBLIC_METHODS
+    public void SetSkin(Material woodMaterial, Material slingMaterial)
+    {
+        SetWoodMaterial(woodMaterial);
+        SetSlingerMaterial(slingMaterial);
+    }
+
+    private void SetWoodMaterial(Material material)
+    {
+        for (int i = 0; i < woodRenderers.Count; i++)
+        {
+            woodRenderers[i].material = material;
+        }
+    }
+
+    private void SetSlingerMaterial(Material material)
+    {
+        for (int i = 0; i < slingRenderers.Count; i++)
+        {
+            slingRenderers[i].material = material;
+        }
+    }
+
     public void InitGameplay(BallEntity ballEntity)
     {
         this.ballPrefab = ballEntity;

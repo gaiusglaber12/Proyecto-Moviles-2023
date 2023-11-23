@@ -6,11 +6,11 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SkinsSelector.unity
-    guid: 46ea7fdc8907d0441a514b220bef0d60
-  - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 8f4bb7f7940f6464f8f9f638dc152c11
+  - enabled: 1
+    path: Assets/Scenes/SkinsSelector.unity
+    guid: 46ea7fdc8907d0441a514b220bef0d60
   - enabled: 1
     path: Assets/Scenes/Persistent.unity
     guid: 22313426e114f12409112187c49c663e

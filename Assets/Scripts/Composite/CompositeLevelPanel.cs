@@ -27,8 +27,44 @@ public class CompositeLevelPanel : CompositeEntity
         else
         {
             LevelPlayedModel levelPlayedModel = data as LevelPlayedModel;
-            levelTxt.text = levelPlayedModel.Level.ToString();
 
+            if (levelPlayedModel.Dificulties.Count < 3)
+            {
+                if (levelPlayedModel.Dificulties[levelPlayedModel.Dificulties.Count - 1].MaxScore > 0)
+                {
+                    DificultyModel dificultyModel = null;
+                    switch (levelPlayedModel.Dificulties[levelPlayedModel.Dificulties.Count - 1].Dificulty)
+                    {
+                        
+                        case "EASY":
+                            dificultyModel = new DificultyModel()
+                            {
+                                Dificulty = "NORMAL",
+                                MaxScore = 0,
+                                ReachedStars = 0
+                            };
+                            levelPlayedModel.Dificulties.Add(dificultyModel);
+                            break;
+                        case "NORMAL":
+                            dificultyModel = new DificultyModel()
+                            {
+                                Dificulty = "HARD",
+                                MaxScore = 0,
+                                ReachedStars = 0
+                            };
+                            levelPlayedModel.Dificulties.Add(dificultyModel);
+                            break;
+                    }
+                }
+            }
+
+            levelTxt.text = levelPlayedModel.Level.ToString();
+            for (int i = 0; i < levelPlayedModel.Dificulties.Count; i++)
+            {
+                GameObject go = Instantiate(compositesDificultyPanelPrefab.gameObject, dificultyHolder);
+                var instantiatedDificultyPanel = go.GetComponent<CompositeDificultyPanel>();
+                instantiatedDificultyPanel.Init((levelPlayedModel,levelPlayedModel.Dificulties[i]));
+            }
         }
     }
     #endregion

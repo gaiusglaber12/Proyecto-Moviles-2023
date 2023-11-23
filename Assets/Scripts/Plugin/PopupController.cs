@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PopupController : MonoBehaviour
+public static class PopupController
 {
     #region CLASS
     class AlertViewCallBack : AndroidJavaProxy
@@ -28,27 +28,28 @@ public class PopupController : MonoBehaviour
     private static AndroidJavaClass popupController = null;
     private static AndroidJavaObject popupControllerInstance = null;
 
-    private string title = "TitleText";
-    private string message = "MessageText";
-    private string button1 = "Close";
+    private static string title = "TitleText";
+    private static string message = "MessageText";
+    private static string button1 = "Close";
     #endregion
 
     #region PUBLIC_METHODS
-    public void ShowPopup()
+    public static void Init()
     {
-#if UNITY_ANDROID && !UNITY_EDITOR
         if (popupControllerInstance == null)
         {
-            Init();
-        }
-        ShowAlertDialog(new string[] { title + Application.version, message, button1 }, (int obj) =>
-        {
-            Debug.Log("Local Handler called: " + obj);
-        });
+#if UNITY_ANDROID && !UNITY_EDITOR
+        popupController = new AndroidJavaClass(packName + "." + loggerClassName);
+        AndroidJavaClass unityJC = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        AndroidJavaObject activity = unityJC.GetStatic<AndroidJavaObject>("currentActivity");
+        popupController.SetStatic("mainActivity", activity);
+
+        popupControllerInstance = popupController.CallStatic<AndroidJavaObject>("GetInstance");
 #endif
+        }
     }
 
-    public void ShowAlertDialog(string[] strings, System.Action<int> handler = null)
+    public static void ShowAlertDialog(string[] strings, System.Action<int> handler = null)
     {
         if (strings.Length < 3)
         {
@@ -64,20 +65,6 @@ public class PopupController : MonoBehaviour
         {
             Debug.LogWarning("AlertView not supported on this platform");
         }
-    }
-    #endregion
-
-    #region PRIVATE_METHODS
-    private static void Init()
-    {
-#if UNITY_ANDROID && !UNITY_EDITOR
-        popupController = new AndroidJavaClass(packName + "." + loggerClassName);
-        AndroidJavaClass unityJC = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-        AndroidJavaObject activity = unityJC.GetStatic<AndroidJavaObject>("currentActivity");
-        popupController.SetStatic("mainActivity", activity);
-
-        popupControllerInstance = popupController.CallStatic<AndroidJavaObject>("GetInstance");
-#endif
     }
     #endregion
 }

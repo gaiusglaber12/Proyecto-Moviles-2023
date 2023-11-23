@@ -13,6 +13,8 @@ public class LevelConfigSO : ScriptableObject
     [SerializeField] private int id = 0;
     [SerializeField] private DIFICULTY dificulty = DIFICULTY.EASY;
     [SerializeField] private BallEntity ballPrefab = null;
+    [SerializeField] private GameObject cageAnimal = null;
+    [SerializeField] private bool isAquatic = false;
     [SerializeField] private int secondsToComplete = 0;
 
     [SerializeField] private int minScore = 0;
@@ -31,5 +33,11 @@ public class LevelConfigSO : ScriptableObject
     public BallEntity BallPrefab { get => ballPrefab; set => ballPrefab = value; }
     public DIFICULTY Dificulty { get => dificulty; set => dificulty = value; }
     public int Id { get => id; set => id = value; }
+    public int MinAnimalsPerCage { get => minAnimalsPerCage; set => minAnimalsPerCage = value; }
+    public int MaxAnimalsPerCage { get => maxAnimalsPerCage; set => maxAnimalsPerCage = value; }
+    public int MinCagesPerChunk { get => minCagesPerChunk; set => minCagesPerChunk = value; }
+    public int MaxCagesPerChunk { get => maxCagesPerChunk; set => maxCagesPerChunk = value; }
+    public GameObject CageAnimal { get => cageAnimal; set => cageAnimal = value; }
+    public bool IsAquatic { get => isAquatic; set => isAquatic = value; }
     #endregion
 }

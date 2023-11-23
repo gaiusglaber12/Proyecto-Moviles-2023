@@ -36,10 +36,10 @@ public class LevelPlayedModel
 public class LevelsPlayedModel
 {
     #region PRIVATE_FIELDS
-    [JsonRequired] private List<LevelsPlayedModel> levelsPlayedModels = null;
+    [JsonRequired] private List<LevelPlayedModel> levelsPlayedModels = null;
     #endregion
 
     #region PROPERTIES
-    [JsonIgnore] public List<LevelsPlayedModel> LevelsPlayedModels { get => levelsPlayedModels; set => levelsPlayedModels = value; }
+    [JsonIgnore] public List<LevelPlayedModel> LevelsPlayedModels { get => levelsPlayedModels; set => levelsPlayedModels = value; }
     #endregion
 }
