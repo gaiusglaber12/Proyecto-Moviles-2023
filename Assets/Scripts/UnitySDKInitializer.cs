@@ -10,6 +10,7 @@ using Unity.Services.Economy;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
 using Unity.VisualScripting.Antlr3.Runtime;
+using UnityEditor.Localization.Plugins.XLIFF.V12;
 
 public class UnitySDKInitializer : MonoBehaviour
 {
@@ -49,25 +50,30 @@ public class UnitySDKInitializer : MonoBehaviour
         {
             // Shows how to get a playerID
             Debug.Log($"PlayerID: {AuthenticationService.Instance.PlayerId}");
+            FileController.WriteFile($"PlayerID: {AuthenticationService.Instance.PlayerId}");
 
             // Shows how to get an access token
             Debug.Log($"Access Token: {AuthenticationService.Instance.AccessToken}");
+            FileController.WriteFile($"Access Token: {AuthenticationService.Instance.AccessToken}");
 
         };
 
         AuthenticationService.Instance.SignInFailed += (err) =>
         {
             Debug.LogError(err);
+            FileController.WriteFile(err.ToString());
         };
 
         AuthenticationService.Instance.SignedOut += () =>
         {
             Debug.Log("Player signed out.");
+            FileController.WriteFile("Player signed out.");
         };
 
         AuthenticationService.Instance.Expired += () =>
         {
             Debug.Log("Player session could not be refreshed and expired.");
+            FileController.WriteFile("Player session could not be refreshed and expired.");
         };
     }
 
@@ -82,11 +88,13 @@ public class UnitySDKInitializer : MonoBehaviour
         catch (AuthenticationException ex)
         {
             Debug.LogError($"{ex.Message}");
+            FileController.WriteFile($"{ex.Message}");
             throw;
         }
         catch (RequestFailedException requestFailed)
         {
             Debug.LogError($"{requestFailed.ErrorCode}");
+            FileController.WriteFile($"{requestFailed.ErrorCode}");
             throw;
         }
     }
@@ -102,11 +110,13 @@ public class UnitySDKInitializer : MonoBehaviour
         catch (AuthenticationException ex)
         {
             Debug.LogException(ex);
+            FileController.WriteFile(ex.ToString());
             throw;
         }
         catch (RequestFailedException ex)
         {
             Debug.LogException(ex);
+            FileController.WriteFile(ex.ToString());
             throw;
         }
     }
@@ -120,12 +130,14 @@ public class UnitySDKInitializer : MonoBehaviour
                 (code) =>
                 {
                     Debug.Log("Auth code is: " + code);
+                    FileController.WriteFile("Auth code is: " + code);
                     AuthenticateWithUnity(code);
                 });
         }
         else
         {
             Debug.LogError("cant initialized game services reason: " + signInStatus);
+            FileController.WriteFile("cant initialized game services reason: " + signInStatus);
         }
     }
     #endregion

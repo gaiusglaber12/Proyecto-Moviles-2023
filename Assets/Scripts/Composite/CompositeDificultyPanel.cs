@@ -14,11 +14,19 @@ public class CompositeDificultyPanel : CompositeEntity
     [SerializeField] private TMPro.TMP_Text dificultyText = null;
     #endregion
 
+    #region PRIAVTE_FIELDS
+    private DificultyModel dificultyModel = null;
+    #endregion
+
+    #region ACTIONS
+    private Action<string> onChangeScene = null;
+    #endregion
+
     #region PUBLIC_METHODS
     public override void Init(object data = null)
     {
         LevelPlayedModel levelPlayedModel = (((LevelPlayedModel, DificultyModel))data).Item1;
-        DificultyModel dificultyModel = (((LevelPlayedModel, DificultyModel))data).Item2;
+        dificultyModel = (((LevelPlayedModel, DificultyModel))data).Item2;
         switch (dificultyModel.Dificulty)
         {
             case "EASY":
@@ -44,19 +52,13 @@ public class CompositeDificultyPanel : CompositeEntity
                 PersistentView.CurrStringDificulty = dificultyModel.Dificulty;
 
                 dificultyBtn.interactable = false;
-                StartCoroutine(StartChangeScene());
-                IEnumerator StartChangeScene()
-                {
-                    var op = SceneManager.LoadSceneAsync("Gameplay", LoadSceneMode.Additive);
-                    while (!op.isDone)
-                    {
-                        yield return null;
-                    }
-
-                    SceneManager.SetActiveScene(SceneManager.GetSceneByName("Gameplay"));
-                    SceneManager.UnloadSceneAsync("LevelSelector");
-                }
+                onChangeScene.Invoke("Gameplay");
             });
+    }
+
+    public void SetChangeScene(Action<string> onChangeScene)
+    {
+        this.onChangeScene = onChangeScene;
     }
     #endregion
 }

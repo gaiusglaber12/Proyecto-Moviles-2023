@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class LevelSelectorPanel : MonoBehaviour
+public class LevelSelectorPanel : SceneController
 {
     #region CONSTANTS
     public const string levelsSavedKey = "levelsPlayed";
@@ -19,32 +19,47 @@ public class LevelSelectorPanel : MonoBehaviour
     [SerializeField] private Button skinShopBtn = null;
     #endregion
 
+    #region PRIVATE_FIELDS
+    private List<CompositeLevelPanel> levelPlayedViews = null;
+    #endregion
+
     #region UNITY_CALLS
     public void Awake()
     {
+        levelPlayedViews = new List<CompositeLevelPanel>();
+
+        PersistentView.Instance.ToggleView(false);
+
         string levelsPlayedRaw = PlayerPrefs.GetString(levelsSavedKey, string.Empty);
         if (string.IsNullOrEmpty(levelsPlayedRaw))
         {
             GameObject go = Instantiate(levelPanelPrefab.gameObject, goHolder);
             var instantiatedLevelPanelPrefab = go.GetComponent<CompositeLevelPanel>();
+            instantiatedLevelPanelPrefab.SetOnChangeScene(ChangeScene);
             instantiatedLevelPanelPrefab.Init(null);
             for (int i = 0; i < maxLevelsPerPage - 1; i++)
             {
-                Instantiate(unplayedLevelsPrefab, goHolder);
+                var clpgo = Instantiate(unplayedLevelsPrefab, goHolder);
+
+                var clp = clpgo.GetComponent<CompositeLevelPanel>();
+                clp.SetOnToggle(SetOnToggle);
+                levelPlayedViews.Add(clp);
             }
         }
         else
         {
             LevelsPlayedModel levelsPlayedModel = JsonConvert.DeserializeObject<LevelsPlayedModel>(levelsPlayedRaw);
 
+            levelsPlayedModel.LevelsPlayedModels.Sort((a, b) => a.Level);
+
             if (levelsPlayedModel.LevelsPlayedModels.Count < maxLevelsPerPage)
             {
-                if (levelsPlayedModel.LevelsPlayedModels[levelsPlayedModel.LevelsPlayedModels.Count - 1].Dificulties.Count > 0) 
+                if (levelsPlayedModel.LevelsPlayedModels[levelsPlayedModel.LevelsPlayedModels.Count - 1].Dificulties.Count > 0)
                 {
                     levelsPlayedModel.LevelsPlayedModels.Add(new LevelPlayedModel()
-                        {
-                            Level = levelsPlayedModel.LevelsPlayedModels.Count,
-                            Dificulties = new List<DificultyModel>()
+                    {
+                        Level = levelsPlayedModel.LevelsPlayedModels.Count+1,
+                        Dificulties = new List<DificultyModel>()
                             {
                                 new DificultyModel()
                                 {
@@ -61,7 +76,10 @@ public class LevelSelectorPanel : MonoBehaviour
             {
                 GameObject go = Instantiate(levelPanelPrefab.gameObject, goHolder);
                 var instantiatedLevelPanelPrefab = go.GetComponent<CompositeLevelPanel>();
+                instantiatedLevelPanelPrefab.SetOnChangeScene(ChangeScene);
                 instantiatedLevelPanelPrefab.Init(levelsPlayedModel.LevelsPlayedModels[i]);
+                instantiatedLevelPanelPrefab.SetOnToggle(SetOnToggle);
+                levelPlayedViews.Add(instantiatedLevelPanelPrefab);
             }
 
             for (int i = 0; i < maxLevelsPerPage - levelsPlayedModel.LevelsPlayedModels.Count - 1; i++)
@@ -75,19 +93,18 @@ public class LevelSelectorPanel : MonoBehaviour
     #region PUBLIC_METHODS
     public void ChangeScene(string sceneName)
     {
-        StartCoroutine(StartChangeScene());
-        IEnumerator StartChangeScene()
-        {
-            skinShopBtn.interactable = false;
-            var op = SceneManager.LoadSceneAsync("SkinsSelector", LoadSceneMode.Additive);
-            while (!op.isDone)
-            {
-                yield return null;
-            }
+        StartCoroutine(ChangeScene("LevelSelector", sceneName));
+    }
+    #endregion
 
-            SceneManager.SetActiveScene(SceneManager.GetSceneByName("SkinsSelector"));
-            SceneManager.UnloadSceneAsync("LevelSelector");
+    #region PRIVATE_METHODS
+    private void SetOnToggle(CompositeLevelPanel compositeLevelPanel)
+    {
+        for (int i=0;i< levelPlayedViews.Count; i++)
+        {
+            levelPlayedViews[i].Toggle(false);
         }
+        compositeLevelPanel.Toggle(true);
     }
     #endregion
 }

@@ -34,12 +34,14 @@ public class AdvertisementSDKInitializer : MonoBehaviour, IUnityAdsInitializatio
     public void OnInitializationComplete()
     {
         Debug.Log("Unity Ads initialization complete.");
+        FileController.WriteFile("Unity Ads initialization complete.");
         rewardedAdsButton.LoadAd();
     }
 
     public void OnInitializationFailed(UnityAdsInitializationError error, string message)
     {
         Debug.Log($"Unity Ads Initialization Failed: {error.ToString()} - {message}");
+        FileController.WriteFile($"Unity Ads Initialization Failed: {error.ToString()} - {message}");
     }
     #endregion
 }

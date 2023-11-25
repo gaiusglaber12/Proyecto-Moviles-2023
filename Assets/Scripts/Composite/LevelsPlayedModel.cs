@@ -12,9 +12,9 @@ public class DificultyModel
     #endregion
 
     #region PROPERTIES
-    public string Dificulty { get => dificulty; set => dificulty = value; }
-    public int ReachedStars { get => reachedStars; set => reachedStars = value; }
-    public int MaxScore { get => maxScore; set => maxScore = value; }
+    [JsonIgnore] public string Dificulty { get => dificulty; set => dificulty = value; }
+    [JsonIgnore] public int ReachedStars { get => reachedStars; set => reachedStars = value; }
+    [JsonIgnore] public int MaxScore { get => maxScore; set => maxScore = value; }
     #endregion
 }
 
@@ -28,7 +28,7 @@ public class LevelPlayedModel
 
     #region PROPERTIES
     [JsonIgnore] public int Level { get => level; set => level = value; }
-    public List<DificultyModel> Dificulties { get => dificulties; set => dificulties = value; }
+    [JsonIgnore] public List<DificultyModel> Dificulties { get => dificulties; set => dificulties = value; }
     #endregion
 }
 

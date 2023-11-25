@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class CarrouselHandler : MonoBehaviour
+public class CarrouselHandler : SceneController
 {
     #region EXPOSED_FIELDS
     [Header("Sling")]
@@ -51,10 +51,11 @@ public class CarrouselHandler : MonoBehaviour
         await GetInventory();
         virtualPurchases = EconomyService.Instance.Configuration.GetVirtualPurchases();
 
-        virtualPurchases.RemoveAll((virtualPurchase) => !virtualPurchase.Id.Contains("slinger") || !virtualPurchase.Id.Contains("SLINGER"));
+        virtualPurchases.RemoveAll((virtualPurchase) => !virtualPurchase.Id.Contains("SLINGER"));
 
         PersistentView.Instance.ToggleView(true);
         slingController.OnSpawned = ConfigureSlinger;
+        slingController.OnSpawnedFinished = ActivateButtons;
         leftButton.interactable = true;
         rightButton.interactable = true;
         totalSlingersTxt.text = "1/" + virtualPurchases.Count;
@@ -64,6 +65,8 @@ public class CarrouselHandler : MonoBehaviour
     #region PUBLIC_METHODS
     public void SetDirection(bool direction)//right = true left = false
     {
+        leftButton.interactable = false;
+        rightButton.interactable = false;
         cachedDirection = direction;
         slingController.SetDespawnAnim();
     }
@@ -71,22 +74,17 @@ public class CarrouselHandler : MonoBehaviour
     public void ChangeScene(string sceneName)
     {
         goBackBtn.interactable = false;
-        StartCoroutine(StartChangeScene());
-        IEnumerator StartChangeScene()
-        {
-            var op = SceneManager.LoadSceneAsync("LevelSelector", LoadSceneMode.Additive);
-            while (!op.isDone)
-            {
-                yield return null;
-            }
-
-            SceneManager.SetActiveScene(SceneManager.GetSceneByName("LevelSelector"));
-            SceneManager.UnloadSceneAsync("SkinsSelector");
-        }
+        StartCoroutine(ChangeScene("SkinsSelector", sceneName));
     }
     #endregion
 
     #region PRIVATE_METHODS
+    private void ActivateButtons()
+    {
+        leftButton.interactable = true;
+        rightButton.interactable = true;
+    }
+
     private async Task GetInventory()
     {
         await PersistentView.Instance.UpdateBalance();//TEMP

@@ -16,6 +16,8 @@ public class LevelConfigSO : ScriptableObject
     [SerializeField] private GameObject cageAnimal = null;
     [SerializeField] private bool isAquatic = false;
     [SerializeField] private int secondsToComplete = 0;
+    [SerializeField] private float speed = 0.0f;
+    [SerializeField] private int seconds = 60;
 
     [SerializeField] private int minScore = 0;
     [SerializeField] private int oneStarScore = 0;
@@ -39,5 +41,11 @@ public class LevelConfigSO : ScriptableObject
     public int MaxCagesPerChunk { get => maxCagesPerChunk; set => maxCagesPerChunk = value; }
     public GameObject CageAnimal { get => cageAnimal; set => cageAnimal = value; }
     public bool IsAquatic { get => isAquatic; set => isAquatic = value; }
+    public float Speed { get => speed; set => speed = value; }
+    public int Seconds { get => seconds; set => seconds = value; }
+    public int MinScore { get => minScore; set => minScore = value; }
+    public int OneStarScore { get => oneStarScore; set => oneStarScore = value; }
+    public int TwoStarScore { get => twoStarScore; set => twoStarScore = value; }
+    public int ThreeStarScore { get => threeStarScore; set => threeStarScore = value; }
     #endregion
 }

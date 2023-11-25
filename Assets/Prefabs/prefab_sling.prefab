@@ -296,9 +296,12 @@ MonoBehaviour:
   eulerOffset: 5
   eulerLerperSpeed: 0.1
   yTrayectoryOffset: 4
-  depthTrayectoryOffset: 2.5
+  depthTrayectoryOffset: 6.9
   minShootingDepth: 0.3
   forceOffset: 49.85
+  xforceOffset: 3
+  yforceOffset: 2.07
+  zforceOffset: 4.83
 --- !u!114 &7670483687016552252
 MonoBehaviour:
   m_ObjectHideFlags: 0

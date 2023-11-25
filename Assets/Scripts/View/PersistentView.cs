@@ -6,6 +6,8 @@ using Unity.Services.Economy.Model;
 using Unity.Services.Economy;
 using System.Threading.Tasks;
 using UnityEngine.UI;
+using System.Collections;
+using System;
 
 public class PersistentView : MonoBehaviour
 {
@@ -15,7 +17,6 @@ public class PersistentView : MonoBehaviour
     [SerializeField] private Scrollbar loadingBar = null;
     [SerializeField] private GameObject barHolder = null;
     [SerializeField] private CanvasGroup backgroundImg = null;
-    [SerializeField] private float backgroundSpeed = 0.3f;
     #endregion
 
     #region PRIVATE_FIELDS}
@@ -54,6 +55,7 @@ public class PersistentView : MonoBehaviour
                 }
             }
         }
+        FileController.WriteFile("PersistentView initialized");
         Debug.Log("PersistentView initialized");
     }
 

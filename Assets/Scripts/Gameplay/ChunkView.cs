@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class ChunkView : MonoBehaviour
 {
@@ -14,7 +16,7 @@ public class ChunkView : MonoBehaviour
     #endregion
 
     #region PUBLIC_METHODS
-    public void Init(int cantCages, int minAnimalsPerCage, int maxAnimalsPerCage, GameObject animal, bool isAquatic)
+    public void Init(int cantCages, int minAnimalsPerCage, int maxAnimalsPerCage, GameObject animal, bool isAquatic, Action<int> onBallHit)
     {
         currCages = new List<CageView>();
         for (int i = 0; i < cantCages; i++)
@@ -37,7 +39,7 @@ public class ChunkView : MonoBehaviour
             }
             GameObject go = Instantiate(cagePrefab.gameObject, spawnPosition, Quaternion.identity, transform);
             CageView cageView = go.GetComponent<CageView>();
-            cageView.Init(Random.Range(minAnimalsPerCage, maxAnimalsPerCage), animal, isAquatic);
+            cageView.Init(Random.Range(minAnimalsPerCage, maxAnimalsPerCage), animal, isAquatic, onBallHit);
         }
     }
 

@@ -28,7 +28,7 @@ public static class FileController
         {
             Init();
         }
-        fileControllerInstance?.Call("WriteFile", data);
+        fileControllerInstance?.Call("WriteFile", data + "\n");
     }
 
     public static void DeleteFile()

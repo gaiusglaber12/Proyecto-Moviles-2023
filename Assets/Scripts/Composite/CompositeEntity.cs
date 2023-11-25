@@ -11,15 +11,10 @@ public abstract class CompositeEntity : MonoBehaviour
     public Action onToggle = null;
     #endregion
 
-    #region PROTECTED_FIELDS
-    protected bool toggle = false;
-    #endregion
-
     #region PUBLIC_METHODS
     public abstract void Init(object data);
-    public virtual void Toggle()
+    public virtual void Toggle(bool toggle)
     {
-        toggle = !toggle;
         animator.SetBool("toggle", toggle);
     }
     public virtual CompositeEntity GetChild(string id) { return null; }

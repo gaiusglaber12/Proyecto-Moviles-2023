@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CompositeLevelPanel : CompositeEntity
 {
@@ -10,6 +12,10 @@ public class CompositeLevelPanel : CompositeEntity
     [SerializeField] private Transform dificultyHolder = null;
     #endregion
 
+    #region ACTIONS
+    private Action<string> onChangeScene = null;
+    #endregion
+
     #region PUBLIC_METHODS
     public override void Init(object data)
     {
@@ -17,12 +23,16 @@ public class CompositeLevelPanel : CompositeEntity
         {
             GameObject go = Instantiate(compositesDificultyPanelPrefab.gameObject, dificultyHolder);
             var instantiatedDificultyPanel = go.GetComponent<CompositeDificultyPanel>();
-            instantiatedDificultyPanel.Init(new DificultyModel()
+            instantiatedDificultyPanel.SetChangeScene(onChangeScene);
+            instantiatedDificultyPanel.Init((new LevelPlayedModel()
+            {
+                Level = 1
+            }, (new DificultyModel()
             {
                 Dificulty = "EASY",
                 MaxScore = 0,
                 ReachedStars = 0
-            });
+            })));
         }
         else
         {
@@ -32,10 +42,9 @@ public class CompositeLevelPanel : CompositeEntity
             {
                 if (levelPlayedModel.Dificulties[levelPlayedModel.Dificulties.Count - 1].MaxScore > 0)
                 {
-                    DificultyModel dificultyModel = null;
+                    DificultyModel dificultyModel;
                     switch (levelPlayedModel.Dificulties[levelPlayedModel.Dificulties.Count - 1].Dificulty)
                     {
-                        
                         case "EASY":
                             dificultyModel = new DificultyModel()
                             {
@@ -63,9 +72,21 @@ public class CompositeLevelPanel : CompositeEntity
             {
                 GameObject go = Instantiate(compositesDificultyPanelPrefab.gameObject, dificultyHolder);
                 var instantiatedDificultyPanel = go.GetComponent<CompositeDificultyPanel>();
-                instantiatedDificultyPanel.Init((levelPlayedModel,levelPlayedModel.Dificulties[i]));
+                instantiatedDificultyPanel.SetChangeScene(onChangeScene);
+                instantiatedDificultyPanel.Init((levelPlayedModel, levelPlayedModel.Dificulties[i]));
             }
         }
+    }
+
+    public void SetOnChangeScene(Action<string> onChangeScene)
+    {
+        this.onChangeScene = onChangeScene;
+    }
+
+    public void SetOnToggle(Action<CompositeLevelPanel> onToggle)
+    {
+        var btn = GetComponentInChildren<Button>();
+        btn.onClick.AddListener(()=>onToggle.Invoke(this));
     }
     #endregion
 }

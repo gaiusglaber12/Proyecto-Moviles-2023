@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cea2d662716eaa44b1ebffd6e35ffcc, type: 3}
+  m_Name: level 3_hard
+  m_EditorClassIdentifier: 
+  id: 3
+  dificulty: 2
+  ballPrefab: {fileID: 1397450182287404053, guid: eebe38ecf8a6cb345858a775b38104db, type: 3}
+  cageAnimal: {fileID: 4481923405350597692, guid: 4b865b96e22b37548b4526770e13d16b, type: 3}
+  isAquatic: 0
+  secondsToComplete: 0
+  speed: 2
+  seconds: 60
+  minScore: 50
+  oneStarScore: 100
+  twoStarScore: 150
+  threeStarScore: 200
+  minAnimalsPerCage: 3
+  maxAnimalsPerCage: 10
+  minCagesPerChunk: 10
+  maxCagesPerChunk: 15

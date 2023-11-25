@@ -1,5 +1,6 @@
 using CandyCoded.HapticFeedback;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -33,6 +34,9 @@ public class SlingController : MonoBehaviour
     [Header("Shoot")]
     [SerializeField] private float minShootingDepth = 0.3f;
     [SerializeField] private float forceOffset = 1.0f;
+    [SerializeField] private float xforceOffset = 1.0f;
+    [SerializeField] private float yforceOffset = 1.0f;
+    [SerializeField] private float zforceOffset = 1.0f;
     #endregion
 
     #region PRIVATE_FIELDS
@@ -51,17 +55,21 @@ public class SlingController : MonoBehaviour
 
     private bool onDespawnTransition = false;
     private bool onVibrated = false;
+    private bool onGameBegined = false;
 
     private Action onSpawned = null;
+    private Action onSpawnedFinished = null;
     private float yOffset = 0.0f;
     #endregion
 
     #region PROPERTIES
     public bool OnDespawnTransition { get => onDespawnTransition; set => onDespawnTransition = value; }
     public Action OnSpawned { get => onSpawned; set => onSpawned = value; }
+    public Action OnSpawnedFinished { get => onSpawnedFinished; set => onSpawnedFinished = value; }
     public float MaxDepth { get => maxScale; }
     public float MinDepth { get => minScale; }
     public float CurrDepth { get => yOffset; }
+    public bool OnGameBegined { get => onGameBegined; set => onGameBegined = value; }
     #endregion
 
     #region UNITY_CALLS
@@ -75,13 +83,16 @@ public class SlingController : MonoBehaviour
     }
     private void Update()
     {
-        CheckInput();
-
-        LerpBandScale(lerpToScale);
-        LerpBandEuler(lerpToEuler);
-        if (elasticBand.localScale.x > minScale)
+        if (onGameBegined)
         {
-            CalculateTrayectory();
+            CheckInput();
+
+            LerpBandScale(lerpToScale);
+            LerpBandEuler(lerpToEuler);
+            if (elasticBand.localScale.x > minScale)
+            {
+                CalculateTrayectory();
+            }
         }
     }
     #endregion
@@ -89,11 +100,8 @@ public class SlingController : MonoBehaviour
     #region PRIVATE_METHODS
     private void CalculateTrayectory()
     {
-        trayectoryDepthValue = new Vector3(transform.position.x - (transform.forward.x * elasticBand.localScale.z * depthTrayectoryOffset), center.transform.position.y,
-            transform.position.z * (-transform.forward.z * elasticBand.localScale.z * depthTrayectoryOffset));
-
-        trayectoryDepthValue = new Vector3(trayectoryDepthValue.x, Mathf.Clamp(trayectoryDepthValue.y, center.transform.position.y, float.MaxValue),
-            Mathf.Clamp(trayectoryDepthValue.z, center.transform.position.z, float.MaxValue));
+        trayectoryDepthValue = new Vector3(transform.position.x - (transform.forward.x * elasticBand.localScale.z * depthTrayectoryOffset), Mathf.Clamp(trayectoryDepthValue.y, center.transform.position.y, float.MaxValue),
+            transform.position.z + (elasticBand.localScale.z * depthTrayectoryOffset));
 
         trayectoryHeightValue = trayectoryDepthValue - center.position;
 
@@ -176,7 +184,7 @@ public class SlingController : MonoBehaviour
     private void ShootBall()
     {
         GameObject ball = Instantiate(ballPrefab.gameObject, center.position, Quaternion.identity);
-        Vector3 force = new Vector3(trayectoryDepthValue.x, trayectoryHeightValue.y, trayectoryDepthValue.z);
+        Vector3 force = new Vector3(trayectoryDepthValue.x * xforceOffset, trayectoryHeightValue.y * yforceOffset, (trayectoryDepthValue.z - transform.position.z) * zforceOffset);
         ball.transform.LookAt(force);
         ball.GetComponent<Rigidbody>().AddForce(force * forceOffset);
         ball.GetComponent<Animation>().PlayQueued("Roll", QueueMode.PlayNow);
@@ -225,6 +233,13 @@ public class SlingController : MonoBehaviour
         {
             animator.SetBool("despawn", false);
         }
+
+        IEnumerator OnSpawnedCompleted()
+        {
+            yield return new WaitForSeconds(1);
+            onSpawnedFinished.Invoke();
+        }
+        StartCoroutine(OnSpawnedCompleted());
     }
 
     public void SetDespawnAnim()

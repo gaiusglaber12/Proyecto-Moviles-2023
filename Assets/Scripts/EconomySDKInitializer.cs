@@ -29,6 +29,7 @@ public class EconomySDKInitializer : MonoBehaviour
         catch (Exception e)
         {
             Debug.LogException(e);
+            FileController.WriteFile(e.ToString());
         }
     }
     #endregion

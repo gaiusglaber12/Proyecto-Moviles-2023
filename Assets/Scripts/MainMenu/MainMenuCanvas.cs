@@ -3,13 +3,13 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class MainMenuCanvas : MonoBehaviour
+public class MainMenuCanvas : SceneController
 {
     #region EXPOSED_FIELDS
     [SerializeField] private Button playBtn = null;
     [SerializeField] private Button showConsolseBtn = null;
     [SerializeField] private ScrollRect scrollView = null;
-    [SerializeField] private TMPro.TMP_InputField inputField = null;
+    [SerializeField] private TMPro.TMP_Text showConsoleTxt = null;
     [SerializeField] private TMPro.TMP_Text readFileTxt = null;
 
     #endregion
@@ -27,6 +27,7 @@ public class MainMenuCanvas : MonoBehaviour
         {
             yield return null;
         }
+        StartCoroutine(FadeScene());
         playBtn.interactable = true;
         PersistentView.Instance.ToggleView(false);
     }
@@ -35,36 +36,26 @@ public class MainMenuCanvas : MonoBehaviour
     #region PUBLIC_METHODS
     public void ChangeScene(string sceneName)
     {
-        StartCoroutine(StartChangeScene());
-        IEnumerator StartChangeScene()
-        {
-            playBtn.interactable = false;
-            var op = SceneManager.LoadSceneAsync("LevelSelector", LoadSceneMode.Additive);
-            while (!op.isDone)
-            {
-                yield return null;
-            }
-            SceneManager.SetActiveScene(SceneManager.GetSceneByName("LevelSelector"));
-
-            SceneManager.UnloadSceneAsync("MainMenu");
-        }
+        StartCoroutine(ChangeScene("MainMenu", sceneName));
     }
 
     public void ToggleConsoleTab()
     {
         toggle = !toggle;
+        if (toggle)
+        {
+            showConsoleTxt.text = "¡Hide Console!";
+        }
+        else
+        {
+            showConsoleTxt.text = "¡Show Console!";
+        }
         scrollView.gameObject.SetActive(toggle);
     }
 
     public void ReadFile()
     {
         readFileTxt.text = FileController.ReadFile();
-    }
-
-    public void WriteFile()
-    {
-        if (inputField.text != string.Empty)
-            FileController.WriteFile(inputField.text + "\n");
     }
 
     public void DeleteLogs()
