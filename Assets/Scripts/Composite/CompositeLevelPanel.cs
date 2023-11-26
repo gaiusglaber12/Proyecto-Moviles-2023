@@ -67,6 +67,34 @@ public class CompositeLevelPanel : CompositeEntity
                 }
             }
 
+            // Definir un comparador personalizado que ordene los strings según el orden inverso al deseado
+            Comparer<string> comparador = Comparer<string>.Create((x, y) =>
+            {
+                // Si los strings son iguales, devolver 0
+                if (x == y) return 0;
+
+                // Si x es "EASY", devolver -1 (x va antes que y)
+                if (x == "EASY") return -1;
+
+                // Si y es "EASY", devolver 1 (y va antes que x)
+                if (y == "EASY") return 1;
+
+                // Si x es "NORMAL", devolver -1 (x va antes que y)
+                if (x == "NORMAL") return -1;
+
+                // Si y es "NORMAL", devolver 1 (y va antes que x)
+                if (y == "NORMAL") return 1;
+
+                // Si x es "HARD", devolver -1 (x va antes que y)
+                if (x == "HARD") return -1;
+
+                // Si y es "HARD", devolver 1 (y va antes que x)
+                if (y == "HARD") return 1;
+
+                // En cualquier otro caso, devolver 0
+                return 0;
+            });
+            levelPlayedModel.Dificulties.Sort((x,y)=>comparador.Compare(x.Dificulty,y.Dificulty));
             levelTxt.text = levelPlayedModel.Level.ToString();
             for (int i = 0; i < levelPlayedModel.Dificulties.Count; i++)
             {
