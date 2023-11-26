@@ -2171,8 +2171,8 @@ MonoBehaviour:
   - {fileID: 8648740930920918043, guid: de323037ab915c5479bbb0ef86721dcf, type: 3}
   depthChunkOffset: 85
   initialChunkPosition: {x: 1.5660963, y: 0.044671446, z: -85}
-  maxPoolSize: 10
-  initialChunks: 5
+  maxPoolSize: 4
+  initialChunks: 2
   loseAnimator: {fileID: 1847539534}
   loseScoreTxt: {fileID: 2121646877}
   losecoinView: {fileID: 638991997}

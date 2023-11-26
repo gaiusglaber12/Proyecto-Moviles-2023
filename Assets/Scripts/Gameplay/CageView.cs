@@ -34,7 +34,6 @@ public class CageView : MonoBehaviour
         currentAnimals = new List<GameObject>();
         this.onBallHit = onBallHit;
         CantAnimals = cantAnimals;
-        water.SetActive(isAquatic);
 
         for (int i = 0; i < cantAnimals; i++)
         {
@@ -65,7 +64,7 @@ public class CageView : MonoBehaviour
             cageGOS.Clear();
             for (int i = 0; i < currentAnimals.Count; i++)
             {
-                var rb = currentAnimals[i].GetComponent<Rigidbody>();
+                var rb = currentAnimals[i].AddComponent<Rigidbody>();
                 rb.AddForce(new Vector3(UnityEngine.Random.Range(minForce, maxForce), UnityEngine.Random.Range(minForce, maxForce), UnityEngine.Random.Range(minForce, maxForce)));
                 Destroy(currentAnimals[i], 3);
             }
@@ -74,6 +73,9 @@ public class CageView : MonoBehaviour
                 onCollisioned = true;
                 onBallHit.Invoke(currentAnimals.Count);
             }
+            var gorb = gameObject.AddComponent<Rigidbody>();
+            gorb.AddForce(new Vector3(UnityEngine.Random.Range(minForce, maxForce), UnityEngine.Random.Range(minForce, maxForce), UnityEngine.Random.Range(minForce, maxForce)));
+            Destroy(gameObject, 3);
             currentAnimals.Clear();
         }
     }

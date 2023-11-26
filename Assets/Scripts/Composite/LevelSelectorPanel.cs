@@ -28,8 +28,15 @@ public class LevelSelectorPanel : SceneController
     {
         levelPlayedViews = new List<CompositeLevelPanel>();
 
-        PersistentView.Instance.ToggleView(false);
-
+        Debug.Log("loading persistentview");
+        if (PersistentView.Instance != null)
+        {
+            PersistentView.Instance.ToggleView(false);
+        }
+        else
+        {
+            Debug.Log("loading persistentview is null");
+        }
         string levelsPlayedRaw = PlayerPrefs.GetString(levelsSavedKey, string.Empty);
         if (string.IsNullOrEmpty(levelsPlayedRaw))
         {
@@ -37,13 +44,11 @@ public class LevelSelectorPanel : SceneController
             var instantiatedLevelPanelPrefab = go.GetComponent<CompositeLevelPanel>();
             instantiatedLevelPanelPrefab.SetOnChangeScene(ChangeScene);
             instantiatedLevelPanelPrefab.Init(null);
+            instantiatedLevelPanelPrefab.SetOnToggle(SetOnToggle);
+            levelPlayedViews.Add(instantiatedLevelPanelPrefab);
             for (int i = 0; i < maxLevelsPerPage - 1; i++)
             {
                 var clpgo = Instantiate(unplayedLevelsPrefab, goHolder);
-
-                var clp = clpgo.GetComponent<CompositeLevelPanel>();
-                clp.SetOnToggle(SetOnToggle);
-                levelPlayedViews.Add(clp);
             }
         }
         else
@@ -58,7 +63,7 @@ public class LevelSelectorPanel : SceneController
                 {
                     levelsPlayedModel.LevelsPlayedModels.Add(new LevelPlayedModel()
                     {
-                        Level = levelsPlayedModel.LevelsPlayedModels.Count+1,
+                        Level = levelsPlayedModel.LevelsPlayedModels.Count + 1,
                         Dificulties = new List<DificultyModel>()
                             {
                                 new DificultyModel()
@@ -100,7 +105,7 @@ public class LevelSelectorPanel : SceneController
     #region PRIVATE_METHODS
     private void SetOnToggle(CompositeLevelPanel compositeLevelPanel)
     {
-        for (int i=0;i< levelPlayedViews.Count; i++)
+        for (int i = 0; i < levelPlayedViews.Count; i++)
         {
             levelPlayedViews[i].Toggle(false);
         }
