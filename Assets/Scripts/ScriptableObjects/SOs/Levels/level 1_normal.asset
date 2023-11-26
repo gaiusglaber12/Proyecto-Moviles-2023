@@ -19,7 +19,7 @@ MonoBehaviour:
   isAquatic: 0
   secondsToComplete: 0
   speed: 2
-  seconds: 60
+  seconds: 40
   minScore: 50
   oneStarScore: 100
   twoStarScore: 150

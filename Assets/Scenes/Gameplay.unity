@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 863df48a8025b9143837baeb90a59971, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -2116,7 +2116,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentScene: Gameplay
   canvasGroup: {fileID: 2015694357}
-  fadeSpeed: 0.5
+  fadeSpeed: 1
   debugConfig: {fileID: 0}
   levels:
   - {fileID: 11400000, guid: f4eb365abbf2a8743992fdbcf9499164, type: 2}

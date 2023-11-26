@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: SlingSkinConfig 6
   m_EditorClassIdentifier: 
   remoteId: slinger_6
-  woodMaterial: {fileID: -2813467912831258332, guid: 5f7afc84335e1b44d947fe2f90bb2317, type: 3}
-  slingMaterial: {fileID: -6087771358165109452, guid: 5f7afc84335e1b44d947fe2f90bb2317, type: 3}
+  woodMaterial: {fileID: 2100000, guid: 9ee5736c74580c341822a916611ab4f8, type: 2}
+  slingMaterial: {fileID: 2100000, guid: 47378d5857a5a5c429aaa25d4be49488, type: 2}

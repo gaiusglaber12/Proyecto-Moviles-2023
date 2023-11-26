@@ -14,10 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 8
   dificulty: 0
-  ballPrefab: {fileID: 1397450182287404053, guid: eebe38ecf8a6cb345858a775b38104db, type: 3}
-  cageAnimal: {fileID: 4481923405350597692, guid: 4b865b96e22b37548b4526770e13d16b, type: 3}
+  ballPrefab: {fileID: 4066930579098450714, guid: 9e0586a244031fc40a2fb284f83ef71d, type: 3}
+  cageAnimal: {fileID: 2276717989138980016, guid: d1a01bbb5a8384846a5c949615f20bd2, type: 3}
   isAquatic: 0
-  secondsToComplete: 0
   speed: 2
   seconds: 60
   minScore: 50

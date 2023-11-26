@@ -94,7 +94,7 @@ public class CompositeLevelPanel : CompositeEntity
                 // En cualquier otro caso, devolver 0
                 return 0;
             });
-            levelPlayedModel.Dificulties.Sort((x,y)=>comparador.Compare(x.Dificulty,y.Dificulty));
+            //levelPlayedModel.Dificulties.Sort((x,y)=>comparador.Compare(x.Dificulty,y.Dificulty));
             levelTxt.text = levelPlayedModel.Level.ToString();
             for (int i = 0; i < levelPlayedModel.Dificulties.Count; i++)
             {

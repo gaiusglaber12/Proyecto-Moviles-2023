@@ -18,13 +18,13 @@ MonoBehaviour:
   cageAnimal: {fileID: 4481923405350597692, guid: 4b865b96e22b37548b4526770e13d16b, type: 3}
   isAquatic: 0
   secondsToComplete: 0
-  speed: 2
-  seconds: 60
-  minScore: 50
-  oneStarScore: 100
-  twoStarScore: 150
-  threeStarScore: 200
-  minAnimalsPerCage: 3
-  maxAnimalsPerCage: 10
-  minCagesPerChunk: 10
-  maxCagesPerChunk: 15
+  speed: 5
+  seconds: 25
+  minScore: 100
+  oneStarScore: 200
+  twoStarScore: 300
+  threeStarScore: 350
+  minAnimalsPerCage: 5
+  maxAnimalsPerCage: 8
+  minCagesPerChunk: 12
+  maxCagesPerChunk: 13

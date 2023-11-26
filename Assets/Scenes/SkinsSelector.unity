@@ -1423,7 +1423,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentScene: SkinsSelector
   canvasGroup: {fileID: 504873807}
-  fadeSpeed: 0.5
+  fadeSpeed: 1
   slingController: {fileID: 1359088368}
   skinConfigsSOs:
   - {fileID: 11400000, guid: faef9815726c84c4ab381e0479a9d358, type: 2}

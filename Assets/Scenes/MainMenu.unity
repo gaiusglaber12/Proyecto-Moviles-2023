@@ -606,7 +606,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentScene: MainMenu
   canvasGroup: {fileID: 472242189}
-  fadeSpeed: 0.5
+  fadeSpeed: 1
   playBtn: {fileID: 351186356}
   showConsolseBtn: {fileID: 850343422}
   scrollView: {fileID: 1971183488}

@@ -73,6 +73,8 @@ public class GameplayController : SceneController
     #region UNITY_CALLS
     private void Awake()
     {
+        poolChunks = new Queue<ChunkView>();
+        StartCoroutine(ChangeSkybox());
         countDownPanel.Init(
             onGameStarted: () =>
                 {
@@ -94,28 +96,12 @@ public class GameplayController : SceneController
             }
         }
 
-        virtualPurchases = EconomyService.Instance.Configuration.GetVirtualPurchases();
-        virtualPurchases.RemoveAll((vp) => vp.Id.Contains("slinger") || vp.Id.Contains("SLINGER"));
         cameraController.Init(currLevel.Speed);
 
         scoreTxt.text = 0 + "/" + currLevel.MinScore;
-
-        poolChunks = new Queue<ChunkView>();
-        switch (currLevel.Dificulty)
-        {
-            case LevelConfigSO.DIFICULTY.EASY:
-                RenderSettings.skybox = dayMat;
-                break;
-            case LevelConfigSO.DIFICULTY.NORMAL:
-                RenderSettings.skybox = bundleMat;
-                break;
-            case LevelConfigSO.DIFICULTY.HARD:
-                RenderSettings.skybox = nightMat;
-                break;
-        }
-
         timer = currLevel.Seconds;
         slingController.InitGameplay(currLevel.BallPrefab);
+
 
         string selectedSlingerId = PlayerPrefs.GetString("selectedSlinger", string.Empty);
         if (selectedSlingerId == string.Empty)
@@ -140,8 +126,27 @@ public class GameplayController : SceneController
             chunkView.Init(Random.Range(currLevel.MinCagesPerChunk, currLevel.MaxCagesPerChunk), currLevel.MinAnimalsPerCage, currLevel.MaxAnimalsPerCage, currLevel.CageAnimal, currLevel.IsAquatic, UpdateScore);
             poolChunks.Enqueue(chunkView);
         }
-    }
 
+        virtualPurchases = EconomyService.Instance.Configuration.GetVirtualPurchases();
+        virtualPurchases.RemoveAll((vp) => vp.Id.Contains("slinger") || vp.Id.Contains("SLINGER"));
+    }
+    IEnumerator ChangeSkybox()
+    {
+        yield return new WaitForSecondsRealtime(0.01f); // Wait for scene initialization
+
+        switch (currLevel.Dificulty)
+        {
+            case LevelConfigSO.DIFICULTY.EASY:
+                RenderSettings.skybox = dayMat;
+                break;
+            case LevelConfigSO.DIFICULTY.NORMAL:
+                RenderSettings.skybox = bundleMat;
+                break;
+            case LevelConfigSO.DIFICULTY.HARD:
+                RenderSettings.skybox = nightMat;
+                break;
+        }
+    }
     private void Update()
     {
         if (slingController.transform.position.z > currChunkPosition.z)
@@ -291,7 +296,7 @@ public class GameplayController : SceneController
 
             for (int i = 0; i < purchaseResult.Rewards.Currency.Count; i++)
             {
-                if (purchaseResult.Rewards.Currency[i].Id == wingemView.CurrencyId)
+                if (purchaseResult.Rewards.Currency[i].Id == losecoinView.CurrencyId)
                 {
                     losecoinView.Init(purchaseResult.Rewards.Currency[i].Amount);
                 }

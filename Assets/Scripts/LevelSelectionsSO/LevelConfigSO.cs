@@ -15,7 +15,6 @@ public class LevelConfigSO : ScriptableObject
     [SerializeField] private BallEntity ballPrefab = null;
     [SerializeField] private GameObject cageAnimal = null;
     [SerializeField] private bool isAquatic = false;
-    [SerializeField] private int secondsToComplete = 0;
     [SerializeField] private float speed = 0.0f;
     [SerializeField] private int seconds = 60;
 

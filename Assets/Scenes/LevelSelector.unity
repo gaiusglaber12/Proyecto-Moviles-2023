@@ -578,7 +578,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentScene: LevelSelector
   canvasGroup: {fileID: 1693605593}
-  fadeSpeed: 0.5
+  fadeSpeed: 1
   levelPanelPrefab: {fileID: 7807675491164043783, guid: 2f722a7e46fdb884dba968364011f5e7, type: 3}
   unplayedLevelsPrefab: {fileID: 723651011671851726, guid: 7c78449ba385a79459fa5f192281c2bc, type: 3}
   maxLevelsPerPage: 12
