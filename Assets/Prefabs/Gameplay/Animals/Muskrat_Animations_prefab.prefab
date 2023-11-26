@@ -52,7 +52,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Muskrat_Animations_prefab
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2223639932434330405, guid: 0f1eb8fcb39d732419a570705c23a921, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

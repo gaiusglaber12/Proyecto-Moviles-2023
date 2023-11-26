@@ -15,7 +15,7 @@ MonoBehaviour:
   id: 9
   dificulty: 1
   ballPrefab: {fileID: 8326911031224550726, guid: 273b0abcaaa7dd247b89811faa727625, type: 3}
-  cageAnimal: {fileID: 6747352600483506219, guid: bbc265bed9472ed4388aea777741df7d, type: 3}
+  cageAnimal: {fileID: 836074143276951717, guid: eee145c108daf3a4da06bcfa7015b505, type: 3}
   isAquatic: 0
   speed: 2
   seconds: 40

@@ -2168,7 +2168,6 @@ MonoBehaviour:
   multScore: 4
   chunkViewPrefabs:
   - {fileID: 992389065990009131, guid: d5c757d65efe6784ab16fd4eb6be79e9, type: 3}
-  - {fileID: 8648740930920918043, guid: de323037ab915c5479bbb0ef86721dcf, type: 3}
   depthChunkOffset: 85
   initialChunkPosition: {x: 1.5660963, y: 0.044671446, z: -85}
   maxPoolSize: 4
@@ -4234,6 +4233,22 @@ PrefabInstance:
       propertyPath: mainCamera
       value: 
       objectReference: {fileID: 963194227}
+    - target: {fileID: 6779695597887719702, guid: 3b0e004f0e166fb4db97793b2ca234a3, type: 3}
+      propertyPath: eulerOffset
+      value: 9.61
+      objectReference: {fileID: 0}
+    - target: {fileID: 6779695597887719702, guid: 3b0e004f0e166fb4db97793b2ca234a3, type: 3}
+      propertyPath: scaleOffset
+      value: 0.0049
+      objectReference: {fileID: 0}
+    - target: {fileID: 6779695597887719702, guid: 3b0e004f0e166fb4db97793b2ca234a3, type: 3}
+      propertyPath: eulerLerperSpeed
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6779695597887719702, guid: 3b0e004f0e166fb4db97793b2ca234a3, type: 3}
+      propertyPath: scaleLerperSpeed
+      value: 0.7
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6020614385987449751, guid: 3b0e004f0e166fb4db97793b2ca234a3, type: 3}
     m_RemovedGameObjects: []

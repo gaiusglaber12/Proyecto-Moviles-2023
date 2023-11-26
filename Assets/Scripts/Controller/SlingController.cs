@@ -1,4 +1,3 @@
-using CandyCoded.HapticFeedback;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -129,16 +128,6 @@ public class SlingController : MonoBehaviour
         float normalYEuler = (maxEuler - minEuler) / 2 + minEuler;
         xOffset += normalYEuler;
         xOffset = Mathf.Clamp(xOffset, minEuler, maxEuler);
-
-        if (yOffset >= maxScale && !onVibrated)
-        {
-            HapticFeedback.LightFeedback();
-            onVibrated = true;
-        }
-        else
-        {
-            onVibrated = false;
-        }
 
         lerpToEuler.y = xOffset;
         lerpToScale.z = yOffset;

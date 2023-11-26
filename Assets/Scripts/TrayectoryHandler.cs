@@ -31,7 +31,6 @@ public class TrayectoryHandler : MonoBehaviour
         this.initialPoint = initialPoint;
         this.heightValue = heightValue;
         this.depthValue = depthValue;
-        Debug.Log("InitialValue: " + initialPoint + "HeightValue: " + heightValue + "DepthValue: " + depthValue);
     }
 
     public void ToggleTrayectory(bool toggle)

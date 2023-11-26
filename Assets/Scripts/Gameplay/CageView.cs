@@ -38,11 +38,6 @@ public class CageView : MonoBehaviour
         for (int i = 0; i < cantAnimals; i++)
         {
             GameObject go = Instantiate(animal, center.position, Quaternion.identity, transform);
-            Animation animation = go.GetComponent<Animation>();
-            for (int j = 0; j < 10; j++)
-            {
-                animation.PlayQueued("Fear");
-            }
             currentAnimals.Add(go);
         }
     }
@@ -51,6 +46,8 @@ public class CageView : MonoBehaviour
     {
         if (collision.gameObject.GetComponent<BallEntity>() != null)
         {
+            Destroy(collision.gameObject);
+            Handheld.Vibrate();
             var particleSystemGO = Instantiate(particleSystemPrefab, transform.position, Quaternion.identity);
             Destroy(particleSystemGO, 3);
             var textParticleSystemGO = Instantiate(textParticleSystemPrefabs[UnityEngine.Random.Range(0, textParticleSystemPrefabs.Length)], transform.position, Quaternion.identity);
@@ -73,8 +70,15 @@ public class CageView : MonoBehaviour
                 onCollisioned = true;
                 onBallHit.Invoke(currentAnimals.Count);
             }
-            var gorb = gameObject.AddComponent<Rigidbody>();
-            gorb.AddForce(new Vector3(UnityEngine.Random.Range(minForce, maxForce), UnityEngine.Random.Range(minForce, maxForce), UnityEngine.Random.Range(minForce, maxForce)));
+            var getrb = gameObject.GetComponent<Rigidbody>();
+            if (getrb == null)
+            {
+                getrb = gameObject.AddComponent<Rigidbody>();
+            }
+            if (getrb != null)
+            {
+                getrb.AddForce(new Vector3(UnityEngine.Random.Range(minForce, maxForce), UnityEngine.Random.Range(minForce, maxForce), UnityEngine.Random.Range(minForce, maxForce)));
+            }
             Destroy(gameObject, 3);
             currentAnimals.Clear();
         }

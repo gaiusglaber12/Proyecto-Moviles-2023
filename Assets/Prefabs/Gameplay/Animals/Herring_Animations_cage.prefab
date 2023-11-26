@@ -52,7 +52,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Herring_Animations_cage
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2223639932434330405, guid: 0b04b4ee27b36df4c94e4df3ea384a9f, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
