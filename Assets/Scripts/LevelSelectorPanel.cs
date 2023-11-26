@@ -1,6 +1,8 @@
 using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -28,15 +30,8 @@ public class LevelSelectorPanel : SceneController
     {
         levelPlayedViews = new List<CompositeLevelPanel>();
 
-        Debug.Log("loading persistentview");
-        if (PersistentView.Instance != null)
-        {
-            PersistentView.Instance.ToggleView(false);
-        }
-        else
-        {
-            Debug.Log("loading persistentview is null");
-        }
+        PersistentView.Instance.ToggleView(false);
+
         string levelsPlayedRaw = PlayerPrefs.GetString(levelsSavedKey, string.Empty);
         if (string.IsNullOrEmpty(levelsPlayedRaw))
         {
@@ -55,7 +50,7 @@ public class LevelSelectorPanel : SceneController
         {
             LevelsPlayedModel levelsPlayedModel = JsonConvert.DeserializeObject<LevelsPlayedModel>(levelsPlayedRaw);
 
-            levelsPlayedModel.LevelsPlayedModels.Sort((a, b) => a.Level);
+            levelsPlayedModel.LevelsPlayedModels = levelsPlayedModel.LevelsPlayedModels.OrderBy(level=>level.Level).ToList();
 
             if (levelsPlayedModel.LevelsPlayedModels.Count < maxLevelsPerPage)
             {

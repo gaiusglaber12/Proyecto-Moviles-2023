@@ -22,10 +22,15 @@ public class MainMenuCanvas : SceneController
     private IEnumerator Start()
     {
         playBtn.interactable = false;
-        var op = SceneManager.LoadSceneAsync("Persistent", LoadSceneMode.Additive);
-        while (!op.isDone)
+
+        var persistent = FindObjectOfType<PersistentView>();
+        if (persistent == null)
         {
-            yield return null;
+            var op = SceneManager.LoadSceneAsync("Persistent", LoadSceneMode.Additive);
+            while (!op.isDone)
+            {
+                yield return null;
+            }
         }
         StartCoroutine(FadeScene());
         playBtn.interactable = true;

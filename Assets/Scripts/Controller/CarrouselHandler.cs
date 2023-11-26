@@ -215,19 +215,22 @@ public class CarrouselHandler : SceneController
         }
         else
         {
-            if (price > PersistentView.Instance.GetActualCurrencyById(virtualPurchases[index].Costs[0].Item.GetReferencedConfigurationItem().Id))
+            if (virtualPurchases[index].Costs.Count > 0)
             {
-                priceTxt.color = Color.red;
-                priceTxt.ForceMeshUpdate();
-                buyButton.interactable = false;
+                if (price > PersistentView.Instance.GetActualCurrencyById(virtualPurchases[index].Costs[0].Item.GetReferencedConfigurationItem().Id))
+                {
+                    priceTxt.color = Color.red;
+                    priceTxt.ForceMeshUpdate();
+                    buyButton.interactable = false;
+                }
+                else
+                {
+                    priceTxt.color = Color.white;
+                    priceTxt.ForceMeshUpdate();
+                    buyButton.interactable = true;
+                }
+                priceTxt.text = price.ToString();
             }
-            else
-            {
-                priceTxt.color = Color.white;
-                priceTxt.ForceMeshUpdate();
-                buyButton.interactable = true;
-            }
-            priceTxt.text = price.ToString();
         }
     }
 
