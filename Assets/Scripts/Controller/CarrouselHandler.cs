@@ -148,27 +148,18 @@ public class CarrouselHandler : SceneController
         string firstPurchase = PlayerPrefs.GetString("firstPurchase", string.Empty);
         if (firstPurchase != string.Empty)
         {
-            PlayerPrefs.SetString("firstPurchase", "true");
-            PlayGamesPlatform.Instance.UnlockAchievement("CgkI - NmMitEJEAIQAQ",
-                (callback) =>
+            PlayerPrefs.SetString("firstPurchase", "true1");
+            PlayGamesPlatform.Instance.ReportProgress("CgkI-NmMitEJEAIQAQ", 100,
+                (state) =>
                 {
-                    PlayGamesPlatform.Instance.IncrementAchievement(
-                        "CgkI-NmMitEJEAIQAQ", 500, (bool success) =>
-                        {
-                            PlayGamesPlatform.Instance.RevealAchievement("CgkI - NmMitEJEAIQAQ");
-                            Social.ReportProgress("CgkI-NmMitEJEAIQAQ", 500,
-                                (state) =>
-                                {
-                                    if (state)
-                                    {
-                                        Debug.Log("achievement unlocked succefully");
-                                    }
-                                    else
-                                    {
-                                        Debug.Log("achievement dont unlocked succefully");
-                                    }
-                                });
-                        });
+                    if (state)
+                    {
+                        Debug.Log("achievement unlocked succefully");
+                    }
+                    else
+                    {
+                        Debug.Log("achievement dont unlocked succefully");
+                    }
                 });
         }
         loadingHolder.SetActive(false);
