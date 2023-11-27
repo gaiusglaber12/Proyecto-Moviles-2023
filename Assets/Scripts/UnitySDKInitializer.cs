@@ -24,6 +24,7 @@ public class UnitySDKInitializer : MonoBehaviour
         try
         {
 #if !UNITY_EDITOR
+            PlayGamesPlatform.DebugLogEnabled = true;
             PlayGamesPlatform.Activate();
             await UnityServices.InitializeAsync();
             PlayGamesPlatform.Instance.Authenticate(OnSignInResult);

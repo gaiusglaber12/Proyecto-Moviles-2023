@@ -6,6 +6,7 @@ using TMPro;
 using Unity.Services.Economy;
 using Unity.Services.Economy.Model;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -146,19 +147,22 @@ public class CarrouselHandler : SceneController
         SetSlingerCurrencyType(virtualPurchases[index].Costs.Count == 0 ? "owned" : virtualPurchases[index].Costs[0].Item.GetReferencedConfigurationItem().Id);
 
         string firstPurchase = PlayerPrefs.GetString("firstPurchase", string.Empty);
-        if (firstPurchase != string.Empty)
+        if (firstPurchase == string.Empty)
         {
-            PlayerPrefs.SetString("firstPurchase", "true1");
-            PlayGamesPlatform.Instance.ReportProgress("CgkI-NmMitEJEAIQAQ", 100,
-                (state) =>
+            PlayerPrefs.SetString("firstPurchase", "true2");
+            Debug.Log("Showing Achievement");
+            Social.ReportProgress(
+                "CgkI-NmMitEJEAIQAQ",
+                100.0f,
+                (bool success) =>
                 {
-                    if (state)
+                    if (success)
                     {
-                        Debug.Log("achievement unlocked succefully");
+                        Debug.Log("AchievementToReveal completed");
                     }
                     else
                     {
-                        Debug.Log("achievement dont unlocked succefully");
+                        Debug.Log("AchievementToReveal not completed");
                     }
                 });
         }
