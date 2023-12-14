@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,7 +12,7 @@ public class MainMenuCanvas : SceneController
     [SerializeField] private ScrollRect scrollView = null;
     [SerializeField] private TMPro.TMP_Text showConsoleTxt = null;
     [SerializeField] private TMPro.TMP_Text readFileTxt = null;
-
+    [SerializeField] private GameObject saveDataPanel = null;
     #endregion
 
     #region PRIVATE_FIELDS
@@ -33,12 +34,49 @@ public class MainMenuCanvas : SceneController
             }
         }
         StartCoroutine(FadeScene());
-        playBtn.interactable = true;
         PersistentView.Instance.ToggleView(false);
+
+        yield return new WaitUntil(() => PersistentView.Instance.initialized == true);
+
+        if (PlayerPrefs.GetString("selectedSlinger") == string.Empty && PlayerPrefs.GetString("levelsPlayed") == string.Empty)
+        {
+            TryGetRemoteData(
+                onSuccess: () =>
+                {
+                    saveDataPanel.SetActive(true);
+                });
+        }
+        else
+        {
+            playBtn.interactable = true;
+        }
     }
     #endregion
 
     #region PUBLIC_METHODS
+    public async void SetRemoteSaving()
+    {
+        saveDataPanel.SetActive(false);
+
+        await PersistentView.Instance.RetrieveSpecificData("selectedSlinger",
+            onSuccess: (selectedSlingerValue) =>
+            {
+                PlayerPrefs.SetString("selectedSlinger", selectedSlingerValue);
+            }, onFailure: () =>
+            {
+                playBtn.interactable = true;
+            });
+        await PersistentView.Instance.RetrieveSpecificData("levelsPlayed",
+            onSuccess: (levelsPlayedModel) =>
+            {
+                PlayerPrefs.SetString("levelsPlayed", levelsPlayedModel);
+                playBtn.interactable = true;
+            }, onFailure: () =>
+            {
+                playBtn.interactable = true;
+            });
+    }
+
     public void ChangeScene(string sceneName)
     {
         StartCoroutine(ChangeScene("MainMenu", sceneName));
@@ -66,6 +104,19 @@ public class MainMenuCanvas : SceneController
     public void DeleteLogs()
     {
         FileController.DeleteFile();
+    }
+
+    private async void TryGetRemoteData(Action onSuccess)
+    {
+        await PersistentView.Instance.RetrieveSpecificData("selectedSlinger",
+            onSuccess: (selectedSlingerValue) =>
+            {
+                onSuccess.Invoke();
+            }, onFailure: () =>
+            {
+                Debug.LogWarning("couldnt get remote data using local data instead");
+                playBtn.interactable = true;
+            });
     }
     #endregion
 }

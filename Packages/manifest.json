@@ -13,6 +13,7 @@
     "com.unity.postprocessing": "3.2.2",
     "com.unity.purchasing": "4.9.4",
     "com.unity.services.authentication": "2.7.2",
+    "com.unity.services.cloudsave": "3.0.0",
     "com.unity.services.economy": "3.1.4",
     "com.unity.test-framework": "1.1.33",
     "com.unity.textmeshpro": "3.0.6",

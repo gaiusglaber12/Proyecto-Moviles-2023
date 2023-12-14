@@ -176,6 +176,7 @@ public class GameplayController : SceneController
     #region PUBLIC_METHODS
     public void ChangeScene(string sceneName)
     {
+        PersistentView.Instance.IncreaseCounter();
         StartCoroutine(ChangeScene("Gameplay", sceneName));
     }
     #endregion
@@ -378,6 +379,7 @@ public class GameplayController : SceneController
 
             levelPlayedRaw = JsonConvert.SerializeObject(levelsPlayedModel);
             PlayerPrefs.SetString(levelsSavedKey, levelPlayedRaw);
+            await PersistentView.Instance.SaveObjectData(levelsSavedKey, levelPlayedRaw);
         }
     }
     private void UpdateScore(int score)

@@ -5,6 +5,7 @@ public class AdvertisementSDKInitializer : MonoBehaviour, IUnityAdsInitializatio
 {
     #region EXPOSED_FIELDS
     [SerializeField] private RewardedAdsButton rewardedAdsButton = null;
+    [SerializeField] private InterstitialAdExample interstitialAdExample = null;
     [SerializeField] string _androidGameId;
     [SerializeField] string _iOSGameId;
     [SerializeField] bool _testMode = true;
@@ -36,6 +37,7 @@ public class AdvertisementSDKInitializer : MonoBehaviour, IUnityAdsInitializatio
         Debug.Log("Unity Ads initialization complete.");
         FileController.WriteFile("Unity Ads initialization complete.");
         rewardedAdsButton.LoadAd();
+        interstitialAdExample.LoadAd();
     }
 
     public void OnInitializationFailed(UnityAdsInitializationError error, string message)

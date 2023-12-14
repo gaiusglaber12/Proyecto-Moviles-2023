@@ -16,6 +16,7 @@ public class UnitySDKInitializer : MonoBehaviour
     #region EXPOSED_FIELDS
     [SerializeField] private EconomySDKInitializer economySDKInitializer = null;
     [SerializeField] private AdvertisementSDKInitializer advertisementSDKInitializer = null;
+    [SerializeField] private PersistentView persistentView = null;
     #endregion
 
     #region UNITY_CALLS
@@ -84,6 +85,7 @@ public class UnitySDKInitializer : MonoBehaviour
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
             await economySDKInitializer.Init();
             advertisementSDKInitializer.Init();
+            persistentView.initialized = true;
         }
         catch (AuthenticationException ex)
         {
@@ -105,7 +107,8 @@ public class UnitySDKInitializer : MonoBehaviour
         {
             await AuthenticationService.Instance.SignInWithGooglePlayGamesAsync(token);
             await economySDKInitializer.Init();
-            advertisementSDKInitializer.Init();//
+            advertisementSDKInitializer.Init();
+            persistentView.initialized = true;
         }
         catch (AuthenticationException ex)
         {

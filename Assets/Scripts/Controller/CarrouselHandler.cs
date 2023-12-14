@@ -124,6 +124,7 @@ public class CarrouselHandler : SceneController
                 }
             }
             PlayerPrefs.SetString(selectedSlingerKey, selectedItem.InventoryItemId);
+            PersistentView.Instance.SaveObjectData(selectedSlingerKey, selectedItem.InventoryItemId);
             selectedButton.interactable = false;
         });
 

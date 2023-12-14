@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using UnityEngine.UI;
 using System.Collections;
 using System;
+using Unity.Services.CloudSave.Models;
+using Unity.Services.CloudSave;
 
 public class PersistentView : MonoBehaviour
 {
@@ -17,16 +19,19 @@ public class PersistentView : MonoBehaviour
     [SerializeField] private Scrollbar loadingBar = null;
     [SerializeField] private GameObject barHolder = null;
     [SerializeField] private CanvasGroup backgroundImg = null;
+    [SerializeField] private InterstitialAdExample interstitialAdExample = null;
     #endregion
 
-    #region PRIVATE_FIELDS}
+    #region PRIVATE_FIELDS
     private List<PlayerBalance> playerBalances = null;
+    private int counterInterestial = 0;
     #endregion
 
     #region UNITY_CALLS
     public static PersistentView Instance { get; private set; }
     public static int CurrLevel = 0;
     public static string CurrStringDificulty = string.Empty;
+    [NonSerialized] public bool initialized = false;
     private void Awake()
     {
         // If there is an instance, and it's not me, delete myself.
@@ -43,6 +48,16 @@ public class PersistentView : MonoBehaviour
     #endregion
 
     #region PUBLIC_METHODS
+    public void IncreaseCounter()
+    {
+        counterInterestial++;
+        if (counterInterestial > 2)
+        {
+            interstitialAdExample.ShowAd();
+            counterInterestial = 0;
+        }
+    }
+
     public void Configure(List<PlayerBalance> playerBalance)
     {
         for (int i = 0; i < currencyViews.Count; i++)
@@ -105,6 +120,63 @@ public class PersistentView : MonoBehaviour
             default:
                 return LevelConfigSO.DIFICULTY.EASY;
         }
+    }
+
+    public async Task SaveObjectData(string key, string value)
+    {
+        try
+        {
+            var playerData = new Dictionary<string, object>
+            {
+                {key, value}
+            };
+            await CloudSaveService.Instance.Data.Player.SaveAsync(playerData);
+            Debug.Log($"Saved data {string.Join(',', playerData)}");
+        }
+        catch (CloudSaveValidationException e)
+        {
+            Debug.LogError(e);
+        }
+        catch (CloudSaveRateLimitedException e)
+        {
+            Debug.LogError(e);
+        }
+        catch (CloudSaveException e)
+        {
+            Debug.LogError(e);
+        }
+    }
+
+    public async Task RetrieveSpecificData(string key, Action<string> onSuccess, Action onFailure)
+    {
+        try
+        {
+            var results = await CloudSaveService.Instance.Data.Player.LoadAsync(
+                new HashSet<string> { key }
+            );
+
+            if (results.TryGetValue(key, out var item))
+            {
+                onSuccess.Invoke(item.Value.GetAs<string>());
+            }
+            else
+            {
+                onFailure.Invoke();
+            }
+        }
+        catch (CloudSaveValidationException e)
+        {
+            onFailure.Invoke();
+        }
+        catch (CloudSaveRateLimitedException e)
+        {
+            onFailure.Invoke();
+        }
+        catch (CloudSaveException e)
+        {
+            onFailure.Invoke();
+        }
+
     }
     #endregion
 }

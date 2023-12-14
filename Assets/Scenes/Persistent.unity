@@ -208,6 +208,7 @@ GameObject:
   - component: {fileID: 416014551}
   - component: {fileID: 416014554}
   - component: {fileID: 416014553}
+  - component: {fileID: 416014555}
   m_Layer: 0
   m_Name: UnitySDKInitializer
   m_TagString: Untagged
@@ -229,6 +230,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   economySDKInitializer: {fileID: 416014554}
   advertisementSDKInitializer: {fileID: 416014553}
+  persistentView: {fileID: 561928192}
 --- !u!4 &416014552
 Transform:
   m_ObjectHideFlags: 0
@@ -257,6 +259,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rewardedAdsButton: {fileID: 1799300807}
+  interstitialAdExample: {fileID: 416014555}
   _androidGameId: 5387213
   _iOSGameId: 5387212
   _testMode: 1
@@ -273,6 +276,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   persistentView: {fileID: 561928192}
+--- !u!114 &416014555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 416014550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3332eb4285775b148ad5489804c07b07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _androidAdUnitId: Interstitial_Android
+  _iOsAdUnitId: Interstitial_iOS
 --- !u!1 &470305941
 GameObject:
   m_ObjectHideFlags: 0
@@ -485,6 +502,7 @@ MonoBehaviour:
   loadingBar: {fileID: 1355853530}
   barHolder: {fileID: 1112980409}
   backgroundImg: {fileID: 470305945}
+  interstitialAdExample: {fileID: 416014555}
 --- !u!1 &652485127
 GameObject:
   m_ObjectHideFlags: 0
